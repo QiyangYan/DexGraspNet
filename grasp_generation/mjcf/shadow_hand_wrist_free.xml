@@ -31,18 +31,18 @@
         <material name="robot0:MatViz" specular="0.75" shininess="0.1" reflectance="0.5" rgba="0.93 0.93 0.93 1" />
         <material name="robot0:object" texture="robot0:texgeom" />
         <material name="floor_mat" specular="0" rgba="0.2 0.2 0.2 0" />
-        <mesh name="robot0:forearm" file="forearm_electric.obj" />
-        <mesh name="robot0:forearm_cvx" file="forearm_electric_cvx.obj" />
-        <mesh name="robot0:wrist" file="wrist.obj" scale="0.001 0.001 0.001" />
-        <mesh name="robot0:palm" file="palm.obj" scale="0.001 0.001 0.001" />
-        <mesh name="robot0:knuckle" file="knuckle.obj" scale="0.001 0.001 0.001" />
-        <mesh name="robot0:F3" file="F3.obj" scale="0.001 0.001 0.001" />
-        <mesh name="robot0:F2" file="F2.obj" scale="0.001 0.001 0.001" />
-        <mesh name="robot0:F1" file="F1.obj" scale="0.001 0.001 0.001" />
-        <mesh name="robot0:lfmetacarpal" file="lfmetacarpal.obj" scale="0.001 0.001 0.001" />
-        <mesh name="robot0:TH3_z" file="TH3_z.obj" scale="0.001 0.001 0.001" />
-        <mesh name="robot0:TH2_z" file="TH2_z.obj" scale="0.001 0.001 0.001" />
-        <mesh name="robot0:TH1_z" file="TH1_z.obj" scale="0.001 0.001 0.001" />
+        <mesh name="robot0:forearm" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/forearm_electric.obj" />
+        <mesh name="robot0:forearm_cvx" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/forearm_electric_cvx.obj" />
+        <mesh name="robot0:wrist" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/wrist.obj" scale="0.001 0.001 0.001" />
+        <mesh name="robot0:palm" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/palm.obj" scale="0.001 0.001 0.001" />
+        <mesh name="robot0:knuckle" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/knuckle.obj" scale="0.001 0.001 0.001" />
+        <mesh name="robot0:F3" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/F3.obj" scale="0.001 0.001 0.001" />
+        <mesh name="robot0:F2" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/F2.obj" scale="0.001 0.001 0.001" />
+        <mesh name="robot0:F1" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/F1.obj" scale="0.001 0.001 0.001" />
+        <mesh name="robot0:lfmetacarpal" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/lfmetacarpal.obj" scale="0.001 0.001 0.001" />
+        <mesh name="robot0:TH3_z" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/TH3_z.obj" scale="0.001 0.001 0.001" />
+        <mesh name="robot0:TH2_z" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/TH2_z.obj" scale="0.001 0.001 0.001" />
+        <mesh name="robot0:TH1_z" file="/home/ubuntu/Downloads/DexGraspNet/grasp_generation/mjcf/meshes/TH1_z.obj" scale="0.001 0.001 0.001" />
     </asset>
     <worldbody>
         <light name="light0" pos="0 1 4" dir="0 0 -1" directional="true" castshadow="false" ambient="0.2 0.2 0.2" diffuse="0.8 0.8 0.8" />
@@ -208,8 +208,8 @@
         </fixed>
     </tendon>
     <actuator>
-        <general name="robot0:A_WRJ1" class="robot0:asset_class" joint="robot0:WRJ1" ctrlrange="-0.489 0.14" forcerange="-4.785 4.785" biastype="affine" gainprm="5 0 0 0 0 0 0 0 0 0" biasprm="0 -5 0 0 0 0 0 0 0 0" user="2038 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" />
-        <general name="robot0:A_WRJ0" class="robot0:asset_class" joint="robot0:WRJ0" ctrlrange="-0.698 0.489" forcerange="-2.175 2.175" biastype="affine" gainprm="5 0 0 0 0 0 0 0 0 0" biasprm="0 -5 0 0 0 0 0 0 0 0" user="2036 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" />
+        <!-- <general name="robot0:A_WRJ1" class="robot0:asset_class" joint="robot0:WRJ1" ctrlrange="-0.489 0.14" forcerange="-4.785 4.785" biastype="affine" gainprm="5 0 0 0 0 0 0 0 0 0" biasprm="0 -5 0 0 0 0 0 0 0 0" user="2038 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" /> -->
+        <!-- <general name="robot0:A_WRJ0" class="robot0:asset_class" joint="robot0:WRJ0" ctrlrange="-0.698 0.489" forcerange="-2.175 2.175" biastype="affine" gainprm="5 0 0 0 0 0 0 0 0 0" biasprm="0 -5 0 0 0 0 0 0 0 0" user="2036 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" /> -->
         <general name="robot0:A_FFJ3" class="robot0:asset_class" joint="robot0:FFJ3" ctrlrange="-0.349 0.349" forcerange="-0.9 0.9" biastype="affine" biasprm="0 -1 0 0 0 0 0 0 0 0" user="2004 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" />
         <general name="robot0:A_FFJ2" class="robot0:asset_class" joint="robot0:FFJ2" ctrlrange="0 1.571" forcerange="-0.9 0.9" biastype="affine" biasprm="0 -1 0 0 0 0 0 0 0 0" user="2002 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" />
         <general name="robot0:A_FFJ1" class="robot0:asset_class" joint="robot0:FFJ1" ctrlrange="0 1.571" forcerange="-0.7245 0.7245" biastype="affine" biasprm="0 -1 0 0 0 0 0 0 0 0" user="2000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" />
@@ -230,8 +230,8 @@
         <general name="robot0:A_THJ0" class="robot0:asset_class" joint="robot0:THJ0" ctrlrange="-1.571 0" forcerange="-0.81 0.81" biastype="affine" biasprm="0 -1 0 0 0 0 0 0 0 0" user="2026 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" />
     </actuator>
     <sensor>
-        <jointpos joint="robot0:WRJ1" name="robot0:Sjp_WRJ1" />
-        <jointpos joint="robot0:WRJ0" name="robot0:Sjp_WRJ0" />
+        <!-- <jointpos joint="robot0:WRJ1" name="robot0:Sjp_WRJ1" />
+        <jointpos joint="robot0:WRJ0" name="robot0:Sjp_WRJ0" /> -->
         <jointpos joint="robot0:FFJ3" name="robot0:Sjp_FFJ3" />
         <jointpos joint="robot0:FFJ2" name="robot0:Sjp_FFJ2" />
         <jointpos joint="robot0:FFJ1" name="robot0:Sjp_FFJ1" />

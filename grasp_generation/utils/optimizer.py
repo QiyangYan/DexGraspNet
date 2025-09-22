@@ -6,10 +6,32 @@ Description: Class Annealing optimizer
 
 import torch
 
+def clip_around_init(x: torch.Tensor, x0: torch.Tensor, rng) -> torch.Tensor:
+    """
+    Clamp x to [x0 - rng, x0 + rng] element-wise.
+
+    x, x0: (B, D) tensors
+    rng: scalar, list/tuple/np/tensor of length D, or (1, D) tensor
+    """
+    x  = torch.as_tensor(x)
+    x0 = torch.as_tensor(x0, device=x.device, dtype=x.dtype)
+    r  = torch.as_tensor(rng, device=x.device, dtype=x.dtype)
+
+    if r.ndim == 0:                      # scalar -> broadcast
+        r = r.expand_as(x)
+    elif r.ndim == 1:                    # (D,) -> (B,D)
+        r = r.view(1, -1).expand_as(x)
+    else:                                # (1,D) or (B,D) -> (B,D)
+        r = r.expand_as(x)
+
+    lo = x0 - r
+    hi = x0 + r
+    return torch.max(lo, torch.min(x, hi))
+
 
 class Annealing:
     def __init__(self, hand_model, switch_possibility=0.5, starting_temperature=18, temperature_decay=0.95, annealing_period=30,
-                 step_size=0.005, stepsize_period=50, mu=0.98, device='cpu'):
+                 step_size=0.005, stepsize_period=50, mu=0.98, device='cpu', init_hand_pose=None):
         """
         Create a optimizer
         
@@ -54,7 +76,9 @@ class Annealing:
         self.old_grad_hand_pose = None
         self.ema_grad_hand_pose = torch.zeros(self.hand_model.n_dofs + 9, dtype=torch.float, device=device)
 
-    def try_step(self):
+        self.init_hand_pose = init_hand_pose
+
+    def try_step(self, fix_wrist=False):
         """
         Try to update translation, rotation, joint angles, and contact point indices
         
@@ -70,8 +94,37 @@ class Annealing:
         self.ema_grad_hand_pose = self.mu * (self.hand_model.hand_pose.grad ** 2).mean(0) + \
             (1 - self.mu) * self.ema_grad_hand_pose
 
-        hand_pose = self.hand_model.hand_pose - \
-            step_size * self.hand_model.hand_pose.grad / (torch.sqrt(self.ema_grad_hand_pose) + 1e-6)
+        delta = step_size * self.hand_model.hand_pose.grad / (torch.sqrt(self.ema_grad_hand_pose) + 1e-6)
+        # if fix_wrist:
+        #     wrist_mask = torch.ones_like(delta)
+        #     wrist_mask[:, :3] = 0
+        #     delta = delta * wrist_mask
+        # hand_pose = self.hand_model.hand_pose - delta
+
+        hand_pose = self.hand_model.hand_pose - delta   # new tensor, part of graph
+        if fix_wrist:
+            # build rng only for the first K dims, then broadcast to full shape
+            rng_list = [0.01, 0.01, 0.01]             # example: clamp translation only
+            rng_head = torch.as_tensor(rng_list, device=hand_pose.device, dtype=hand_pose.dtype).view(1, -1)
+            K = rng_head.shape[-1]
+
+            rng_full = torch.zeros_like(hand_pose)
+            rng_full[:, :K] = rng_head                 # <- out-of-place fill
+
+            x0 = self.init_hand_pose             # detached snapshot (B,D)
+            
+            lo = x0[:, :K] - rng_head
+            hi = x0[:, :K] + rng_head
+
+            firstK = torch.max(lo, torch.min(hand_pose[:, :K], hi))
+            hand_pose = torch.cat([firstK, hand_pose[:, K:]], dim=1)
+
+        # now apply to the model WITHOUT creating grads on assignment
+        with torch.no_grad():
+            self.old_hand_pose = self.hand_model.hand_pose
+            self.old_contact_point_indices = self.hand_model.contact_point_indices.clone()
+            # (stash other caches as you had)
+
         batch_size, n_contact = self.hand_model.contact_point_indices.shape
         switch_mask = torch.rand(batch_size, n_contact, dtype=torch.float, device=self.device) < self.switch_possibility
         contact_point_indices = self.hand_model.contact_point_indices.clone()

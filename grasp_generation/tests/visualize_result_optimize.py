@@ -39,9 +39,9 @@ joint_names = [
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--object_code', type=str, default='dexycb_robot_joint_opt_dict')
+    parser.add_argument('--object_code', type=str, default='46_008_pudding_box')
     parser.add_argument('--num', type=int, default=0)
-    parser.add_argument('--result_path', type=str, default='/home/ubuntu/Documents/DexGraspNet/data/dataset')
+    parser.add_argument('--result_path', type=str, default='/home/ubuntu/Documents/DexGraspNet/data/experiments/exp_2/results_d1_v0')
     args = parser.parse_args()
 
     device = 'cpu'
@@ -49,11 +49,8 @@ if __name__ == '__main__':
     # load results
     data_dict = np.load(os.path.join(args.result_path, args.object_code + '.npy'), allow_pickle=True)[args.num]
     qpos = data_dict['qpos']
-    object_code = data_dict['object_code']
-    object_pose = data_dict['object_pose']
-    # rot = np.array(transforms3d.euler.euler2mat(*[qpos[name] for name in rot_names]))
-    # rot = rot[:, :2].T.ravel().tolist()
-    rot = data_dict['hand_rot6d']
+    rot = np.array(transforms3d.euler.euler2mat(*[qpos[name] for name in rot_names]))
+    rot = rot[:, :2].T.ravel().tolist()
     hand_pose = torch.tensor([qpos[name] for name in translation_names] + rot + [qpos[name] for name in joint_names], dtype=torch.float, device=device)
     if 'qpos_st' in data_dict:
         qpos_st = data_dict['qpos_st']
@@ -75,27 +72,24 @@ if __name__ == '__main__':
         num_samples=2000, 
         device=device
     )
+    name_no_ext = os.path.splitext(args.object_code)[0]
+    object_idx, object_code = name_no_ext.split("_", 1)
     object_model.initialize(object_code_list=object_code)
     object_model.object_scale_tensor = torch.tensor(1, dtype=torch.float, device=device).reshape(1, 1)
 
     # visualize
 
-    if 'qpos_st' in data_dict:
-        hand_model.set_parameters(hand_pose_st.unsqueeze(0))
-        hand_st_plotly = hand_model.get_plotly_data(i=0, opacity=0.5, color='lightblue', with_contact_points=False)
-    else:
-        hand_st_plotly = []
+    hand_st_plotly = []
     hand_model.set_parameters(hand_pose.unsqueeze(0))
     hand_en_plotly = hand_model.get_plotly_data(i=0, opacity=1, color='lightblue', with_contact_points=False)
-    object_plotly = object_model.get_plotly_data(i=0, color='lightgreen', opacity=1, pose=object_pose)
-    # object_plotly = object_model.get_plotly_data(i=0, color='lightgreen', opacity=1)
+    object_plotly = object_model.get_plotly_data(i=0, color='lightgreen', opacity=1)
     fig = go.Figure(hand_st_plotly + hand_en_plotly + object_plotly)
     if 'energy' in data_dict:
         energy = data_dict['energy']
         E_fc = round(data_dict['E_fc'], 3)
         E_dis = round(data_dict['E_dis'], 5)
         E_pen = round(data_dict['E_pen'], 5)
-        E_spen = round(data_dict['E_spen'], 5)
+        # E_spen = round(data_dict['E_spen'], 5)
         E_joints = round(data_dict['E_joints'], 5)
         result = f'Index {args.num}  E_fc {E_fc}  E_dis {E_dis}  E_pen {E_pen}'
         fig.add_annotation(text=result, x=0.5, y=0.1, xref='paper', yref='paper')

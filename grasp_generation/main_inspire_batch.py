@@ -15,15 +15,31 @@ import torch
 from tqdm import tqdm
 import math
 import transforms3d
+import plotly.graph_objects as go
 
 from utils.hand_model import HandModel
 from utils.object_model import ObjectModel
-from utils.initializations import initialize_convex_hull
 from utils.energy import cal_energy
 from utils.optimizer import Annealing
 from utils.logger import Logger
 from utils.rot6d import robust_compute_rotation_matrix_from_ortho6d
 
+translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
+rot_names = ['WRJRx', 'WRJRy', 'WRJRz']
+joint_names = [
+    "R_thumb_MCP_joint1",
+    "R_thumb_MCP_joint2",
+    "R_thumb_PIP_joint",
+    "R_thumb_DIP_joint",
+    "R_index_MCP_joint",
+    "R_index_DIP_joint",
+    "R_middle_MCP_joint",
+    "R_middle_DIP_joint",
+    "R_ring_MCP_joint",
+    "R_ring_DIP_joint",
+    "R_pinky_MCP_joint",
+    "R_pinky_DIP_joint"
+]
 
 # prepare arguments
 
@@ -31,19 +47,13 @@ parser = argparse.ArgumentParser()
 # experiment settings
 parser.add_argument('--seed', default=1, type=int)
 parser.add_argument('--gpu', default="0", type=str)
-parser.add_argument('--object_code_list', default=
-    [
-        'sem-Camera-7bff4fd4dc53de7496dece3f86cb5dd5',
-        # 'sem-Car-2f28e2bd754977da8cfac9da0ff28f62',
-        # 'sem-Car-27e267f0570f121869a949ac99a843c4',
-        # 'sem-Car-669043a8ce40d9d78781f76a6db4ab62',
-        # 'sem-Car-58379002fbdaf20e61a47cff24512a0',
-        # 'sem-Car-aeeb2fb31215f3249acee38782dd9680',
-    ], type=list)
+parser.add_argument('--num', default=0, type=int)
+parser.add_argument('--object_code', default=None, type=str)
 parser.add_argument('--name', default='exp_2', type=str)
-parser.add_argument('--n_contact', default=4, type=int)
-parser.add_argument('--batch_size', default=128, type=int)
+parser.add_argument('--n_contact', default=96, type=int)
+parser.add_argument('--batch_size', default=1, type=int)
 parser.add_argument('--n_iter', default=6000, type=int)
+parser.add_argument('--fix_wrist', action='store_true', default=False, help='fix wrist translation and rotation')
 # hyper parameters (** Magic, don't touch! **)
 parser.add_argument('--switch_possibility', default=0.5, type=float)
 parser.add_argument('--mu', default=0.98, type=float)
@@ -75,35 +85,67 @@ np.seterr(all='raise')
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 
-
 # prepare models
-
-total_batch_size = len(args.object_code_list) * args.batch_size
-
 os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('running on', device)
 
+grasp_file = "dexycb_robot_joint_dict_d1_5_v0"
+result_path = "/home/ubuntu/Documents/DexGraspNet/data/dataset"
+data_dict = np.load(os.path.join(result_path, grasp_file + '.npy'), allow_pickle=True)
+object_code_list = []
+hand_pose_list = []
+obj_idx = []
+for data in data_dict:
+    if args.object_code is not None and data['object_code'] != args.object_code:
+        continue
+    qpos = data['qpos']
+    object_code_list.append(data['object_code'])
+    obj_idx.append(data['idx'])
+    object_pose = data['object_pose']
+    rot = data['hand_rot6d']
+    hand_pose = torch.tensor([qpos[name] for name in translation_names] + rot + [qpos[name] for name in joint_names], dtype=torch.float, device=device)
+    hand_pose_list.append(torch.tensor([qpos[name] for name in translation_names] + rot + [qpos[name] for name in joint_names], dtype=torch.float, device=device))
+    if args.object_code is not None:
+        break
+hand_pose_tensor = torch.stack([hp.to('cuda:0').view(-1) for hp in hand_pose_list], dim=0)
+
+total_batch_size = len(object_code_list) * args.batch_size
+
 hand_model = HandModel(
-    mjcf_path='mjcf/shadow_hand_wrist_free.xml',
-    mesh_path='mjcf/meshes',
-    contact_points_path='mjcf/contact_points.json',
-    penetration_points_path='mjcf/penetration_points.json',
+    mjcf_path='/home/ubuntu/Documents/DexGraspNet/grasp_generation/mjcf/inspire_free_dexgraspnet.xml',
+    mesh_path='/home/ubuntu/Documents/DexGraspNet/grasp_generation/mjcf/meshes',
+    contact_points_path='/home/ubuntu/Documents/DexGraspNet/grasp_generation/mjcf/contact_points_inspire.json',
+    penetration_points_path='/home/ubuntu/Documents/DexGraspNet/grasp_generation/mjcf/penetration_points_inspire.json',
     device=device
-)
+    )
 
 object_model = ObjectModel(
-    data_root_path='../data/meshdata',
+    data_root_path='/home/ubuntu/Documents/DexYCB/models',
     batch_size_each=args.batch_size,
-    num_samples=2000, 
+    num_samples=2000,
     device=device
 )
-object_model.initialize(args.object_code_list)
+object_model.initialize(object_code_list=object_code_list)
 
-initialize_convex_hull(hand_model, object_model, args)
+hand_st_plotly = []
+# contact_point_indices = torch.randint(hand_model.n_contact_candidates, size=[total_batch_size, args.n_contact], device=device)
+contact_point_indices = torch.arange(
+    hand_model.n_contact_candidates, device=device
+).repeat(total_batch_size, 1)
+hand_pose_tensor.requires_grad_()
+hand_model.set_parameters(hand_pose_tensor, contact_point_indices)
 
-print('n_contact_candidates', hand_model.n_contact_candidates)
-print('total batch size', total_batch_size)
+# for i in range(5):
+#     hand_en_plotly = hand_model.get_plotly_data(i=i, opacity=1, color='lightblue', with_contact_points=False)
+#     object_plotly = object_model.get_plotly_data(i=i, color='lightgreen', opacity=1)
+#     fig = go.Figure(hand_st_plotly + hand_en_plotly + object_plotly)
+#     fig.update_layout(scene_aspectmode='data')
+#     fig.show()
+# input("Verify the pose for optimization, press Enter to continue...")
+
+# print('n_contact_candidates', hand_model.n_contact_candidates)
+# print('total batch size', total_batch_size)
 hand_pose_st = hand_model.hand_pose.detach()
 
 optim_config = {
@@ -116,7 +158,7 @@ optim_config = {
     'mu': args.mu,
     'device': device
 }
-optimizer = Annealing(hand_model, **optim_config)
+optimizer = Annealing(hand_model, init_hand_pose=hand_pose_tensor, **optim_config)
 
 try:
     shutil.rmtree(os.path.join('../data/experiments', args.name, 'logs'))
@@ -132,13 +174,10 @@ logger = Logger(log_dir=os.path.join('../data/experiments', args.name, 'logs'), 
 
 
 # log settings
-
 with open(os.path.join('../data/experiments', args.name, 'output.txt'), 'w') as f:
     f.write(str(args) + '\n')
 
-
 # optimize
-
 weight_dict = dict(
     w_dis=args.w_dis,
     w_pen=args.w_pen,
@@ -146,12 +185,17 @@ weight_dict = dict(
     w_joints=args.w_joints,
 )
 energy, E_fc, E_dis, E_pen, E_spen, E_joints = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
-
+print('Initial energy:', energy.mean().item(),
+      ' E_fc:', E_fc.mean().item(),
+      ' E_dis:', E_dis.mean().item(),
+      ' E_pen:', E_pen.mean().item(),   
+    ' E_spen:', E_spen.mean().item(),
+        ' E_joints:', E_joints.mean().item())
 energy.sum().backward(retain_graph=True)
-logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, 0, show=False)
-
-for step in tqdm(range(1, args.n_iter + 1), desc='optimizing'):
-    s = optimizer.try_step()
+logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, 0, show=True)
+pbar = tqdm(range(1, args.n_iter + 1), desc='optimizing', dynamic_ncols=True)
+for step in pbar:
+    s = optimizer.try_step(fix_wrist=args.fix_wrist)
 
     optimizer.zero_grad()
     new_energy, new_E_fc, new_E_dis, new_E_pen, new_E_spen, new_E_joints = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
@@ -165,22 +209,38 @@ for step in tqdm(range(1, args.n_iter + 1), desc='optimizing'):
         E_dis[accept] = new_E_dis[accept]
         E_fc[accept] = new_E_fc[accept]
         E_pen[accept] = new_E_pen[accept]
-        E_spen[accept] = new_E_spen[accept]
         E_joints[accept] = new_E_joints[accept]
 
         logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, step, show=False)
+
+        pbar.set_postfix({
+            "E": f"{energy.mean().item():.3f}",
+            "fc": f"{E_fc.mean().item():.3f}",
+            "dis": f"{E_dis.mean().item():.3f}",
+            "pen": f"{E_pen.mean().item():.3f}",
+            "spen": f"{E_spen.mean().item():.3f}",
+            "joints": f"{E_joints.mean().item():.3f}"
+        })
 
 
 # save results
 translation_names = ['WRJTx', 'WRJTy', 'WRJTz']
 rot_names = ['WRJRx', 'WRJRy', 'WRJRz']
 joint_names = [
-    'robot0:FFJ3', 'robot0:FFJ2', 'robot0:FFJ1', 'robot0:FFJ0',
-    'robot0:MFJ3', 'robot0:MFJ2', 'robot0:MFJ1', 'robot0:MFJ0',
-    'robot0:RFJ3', 'robot0:RFJ2', 'robot0:RFJ1', 'robot0:RFJ0',
-    'robot0:LFJ4', 'robot0:LFJ3', 'robot0:LFJ2', 'robot0:LFJ1', 'robot0:LFJ0',
-    'robot0:THJ4', 'robot0:THJ3', 'robot0:THJ2', 'robot0:THJ1', 'robot0:THJ0'
+    "R_thumb_MCP_joint1",
+    "R_thumb_MCP_joint2",
+    "R_thumb_PIP_joint",
+    "R_thumb_DIP_joint",
+    "R_index_MCP_joint",
+    "R_index_DIP_joint",
+    "R_middle_MCP_joint",
+    "R_middle_DIP_joint",
+    "R_ring_MCP_joint",
+    "R_ring_DIP_joint",
+    "R_pinky_MCP_joint",
+    "R_pinky_DIP_joint"
 ]
+
 try:
     shutil.rmtree(os.path.join('../data/experiments', args.name, 'results'))
 except FileNotFoundError:
@@ -188,7 +248,7 @@ except FileNotFoundError:
 os.makedirs(os.path.join('../data/experiments', args.name, 'results'), exist_ok=True)
 result_path = os.path.join('../data/experiments', args.name, 'results')
 os.makedirs(result_path, exist_ok=True)
-for i in range(len(args.object_code_list)):
+for i in range(len(object_code_list)):
     data_list = []
     for j in range(args.batch_size):
         idx = i * args.batch_size + j
@@ -213,7 +273,8 @@ for i in range(len(args.object_code_list)):
             E_fc=E_fc[idx].item(),
             E_dis=E_dis[idx].item(),
             E_pen=E_pen[idx].item(),
-            E_spen=E_spen[idx].item(),
             E_joints=E_joints[idx].item(),
+            idx=obj_idx[i],
         ))
-    np.save(os.path.join(result_path, args.object_code_list[i] + '.npy'), data_list, allow_pickle=True)
+    np.save(os.path.join(result_path, str(obj_idx[i]) + '_' + object_code_list[i] + '.npy'), data_list, allow_pickle=True)
+    print("Saved to ", result_path)
