@@ -63,13 +63,13 @@ class HandModel:
                 n_link_vertices = 0
                 for visual in body.link.visuals:
                     scale = torch.tensor([1, 1, 1], dtype=torch.float, device=device)
-                    if visual.geom_type == "box":
+                    # Skip unsupported or collision-only geometry types
+                    if visual.geom_type in ["box", "sphere", None]:
                         continue
-                        # link_mesh = trimesh.primitives.Box(extents=2 * visual.geom_param)
-                        link_mesh = tm.load_mesh(os.path.join(mesh_path, 'box.obj'), process=False)
-                        link_mesh.vertices *= visual.geom_param.detach().cpu().numpy()
                     elif visual.geom_type == "capsule":
                         link_mesh = tm.primitives.Capsule(radius=visual.geom_param[0], height=visual.geom_param[1] * 2).apply_translation((0, 0, -visual.geom_param[1]))
+                    elif visual.geom_type == "cylinder":
+                        link_mesh = tm.primitives.Cylinder(radius=visual.geom_param[0], height=visual.geom_param[1] * 2).apply_translation((0, 0, -visual.geom_param[1]))
                     elif visual.geom_type == "mesh":
                         link_mesh = tm.load_mesh(os.path.join(mesh_path, visual.geom_param[0]+".STL"), process=False)
                         if visual.geom_param[1] is not None:

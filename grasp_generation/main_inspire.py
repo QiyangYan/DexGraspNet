@@ -100,8 +100,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('running on', device)
 
-grasp_file = "dexycb_robot_joint_dict"
-result_path = "/home/ubuntu/Documents/DexGraspNet/data/dataset"
+grasp_file = "dexycb_robot_joint_dict_d1_5_v0"
+result_path = "/home/guizhewei/guizhewei/DexGraspNet/data/dataset"
 data_dict = np.load(os.path.join(result_path, grasp_file + '.npy'), allow_pickle=True)[args.num]
 qpos = data_dict['qpos']
 object_code = [data_dict['object_code']]
@@ -109,16 +109,23 @@ object_pose = data_dict['object_pose']
 rot = data_dict['hand_rot6d']
 hand_pose = torch.tensor([qpos[name] for name in translation_names] + rot + [qpos[name] for name in joint_names], dtype=torch.float, device=device)
 
+# Temporarily change to mjcf directory for mesh loading
+current_dir = os.getcwd()
+os.chdir('/home/guizhewei/guizhewei/DexGraspNet/grasp_generation/mjcf')
+
 hand_model = HandModel(
-    mjcf_path='/home/ubuntu/Documents/DexGraspNet/grasp_generation/mjcf/inspire_free_dexgraspnet.xml',
-    mesh_path='/home/ubuntu/Documents/DexGraspNet/grasp_generation/mjcf/meshes',
-    contact_points_path='/home/ubuntu/Documents/DexGraspNet/grasp_generation/mjcf/contact_points_inspire.json',
-    penetration_points_path='/home/ubuntu/Documents/DexGraspNet/grasp_generation/mjcf/penetration_points_inspire.json',
+    mjcf_path='/home/guizhewei/guizhewei/DexGraspNet/grasp_generation/mjcf/inspire_free_dexgraspnet.xml',
+    mesh_path='/home/guizhewei/guizhewei/DexGraspNet/grasp_generation/mjcf/meshes_inspire',
+    contact_points_path='/home/guizhewei/guizhewei/DexGraspNet/grasp_generation/mjcf/contact_points_inspire.json',
+    penetration_points_path='/home/guizhewei/guizhewei/DexGraspNet/grasp_generation/mjcf/penetration_points_inspire.json',
     device=device
     )
 
+# Change back to original directory
+os.chdir(current_dir)
+
 object_model = ObjectModel(
-    data_root_path='/home/ubuntu/Documents/DexYCB/models',
+    data_root_path='/home/guizhewei/guizhewei/Dexycb_dataset/models',
     batch_size_each=args.batch_size,
     num_samples=2000,
     device=device

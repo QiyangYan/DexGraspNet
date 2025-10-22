@@ -6,6 +6,11 @@ dataset
 
 # Caches
 __pycache__
+cub-1.10.0
+1.10.0.tar.gz
+isaacgym
+TorchSDF
+thirdparty
 grasp_generation/mjcf/contact_points_inspire.json
 grasp_generation/mjcf/inspire_free_dexgraspnet.xml
 grasp_generation/mjcf/inspire_free.xml

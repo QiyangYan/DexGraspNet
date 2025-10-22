@@ -15,12 +15,12 @@ def geoms_to_visuals(geom, base=tf.Transform3d()):
             param = g.size[0]
         elif g.type == 'box':
             param = g.size
+        elif g.type == 'cylinder':
+            param = (g.size[0], g.size[1])
         elif g.type == 'mesh':
             param = (g.mesh.name, g.mesh.scale)
         else:
-            # print(g.name)
             param = (g.mesh.name, g.mesh.scale)
-            # raise ValueError('Invalid geometry type %s.' % g.type)
         visuals.append(frame.Visual(offset=base.compose(tf.Transform3d(rot=g.quat, pos=g.pos)),
                                     geom_type=g.type,
                                     geom_param=param))

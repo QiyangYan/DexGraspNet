@@ -1,0 +1,309 @@
+<mujoco model="O12-T2-r-URDF">
+  <compiler angle="radian" autolimits="true"/>
+  <statistic meansize="0.119253" extent="0.945417" center="-2.961e-06 0.00561221 0.418652"/>
+    <asset>
+        <mesh name="hand_base_link" file="hand_base_link.STL" />
+        <mesh name="thumb_metacarpals_base1" file="thumb_metacarpals_base1.STL" />
+        <mesh name="thumb_metacarpals_base2" file="thumb_metacarpals_base2.STL" />
+        <mesh name="thumb_metacarpals" file="thumb_metacarpals.STL" />
+        <mesh name="thumb_proximal" file="thumb_proximal.STL" />
+        <mesh name="thumb_distal" file="thumb_distal.STL" />
+        <mesh name="thumb_Virtual_Point" file="thumb_Virtual_Point.STL" />
+        <mesh name="index_metacarpals" file="index_metacarpals.STL" />
+        <mesh name="index_proximal" file="index_proximal.STL" />
+        <mesh name="index_middle" file="index_middle.STL" />
+        <mesh name="index_distal" file="index_distal.STL" />
+        <mesh name="index_Virtual_Point" file="index_Virtual_Point.STL" />
+        <mesh name="middle_metacarpals" file="middle_metacarpals.STL" />
+        <mesh name="middle_proximal" file="middle_proximal.STL" />
+        <mesh name="middle_middle" file="middle_middle.STL" />
+        <mesh name="middle_distal" file="middle_distal.STL" />
+        <mesh name="middle_Virtual_Point" file="middle_Virtual_Point.STL" />
+        <mesh name="ring_proximal" file="ring_proximal.STL" />
+        <mesh name="ring_middle" file="ring_middle.STL" />
+        <mesh name="ring_distal" file="ring_distal.STL" />
+        <mesh name="ring_Virtual_Point" file="ring_Virtual_Point.STL" />
+        <mesh name="pinky_proximal" file="pinky_proximal.STL" />
+        <mesh name="pinky_middle" file="pinky_middle.STL" />
+        <mesh name="pinky_distal" file="pinky_distal.STL" />
+        <mesh name="pinky_Virtual_Point" file="pinky_Virtual_Point.STL" />
+    </asset>
+    <default>
+        <default class="thumb_base">
+            <joint range="0.263 1.396"/>
+            <position ctrlrange="0 3.14" kp="0.5"/>
+        </default>
+    </default>
+    <worldbody>
+        <body name="hand_base" >
+            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" mesh="hand_base_link" />
+            <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="hand_base_link" />
+            <body name="site_R_hand_centre" pos="-0.085 0.027 0.22">
+            <site name="site_R_hand_centre" rgba="1 0 0 1"/> 
+            </body>
+            <body name="thumb_metacarpals_base1" pos="-0.0075211 0.022278 0.04025">
+                <inertial pos="0.0128314 -0.000678732 -6.35819e-05" quat="0.492082 0.516169 -0.452537 0.535384" mass="0.00393646" diaginertia="6.21129e-07 5.69563e-07 2.88602e-07" />
+                <joint name="thumb_cmc_roll" pos="0 0 0" axis="1 0 0" limited="true" range="-0.293 0.6489" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="thumb_metacarpals_base1" />
+                <geom type="mesh" rgba="1 1 1 1" mesh="thumb_metacarpals_base1" />
+                <body name="thumb_metacarpals_base2" pos="0.0350706 0.00330139 0">
+                    <inertial pos="0.00581591 0.00635158 0.00301818" quat="0.470578 0.795037 -0.348611 -0.157932" mass="0.0017168" diaginertia="1.59232e-07 1.0809e-07 6.28277e-08" />
+                    <joint name="thumb_cmc_yaw" pos="0 0 0" axis="0 0 -1" limited="true" range="0 1.3868" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="thumb_metacarpals_base2" />
+                    <geom type="mesh" rgba="1 1 1 1" mesh="thumb_metacarpals_base2" />
+                    <body name="thumb_metacarpals" pos="0.0161297 0.0163049 0.00686106" quat="0.344686 -0.41188 -0.171911 -0.825829">
+                        <inertial pos="0.00385873 0.000181218 0.0262736" quat="0.704179 0.0257112 0.0240545 0.709149" mass="0.0170905" diaginertia="8.03881e-06 6.65511e-06 1.80668e-06" />
+                        <joint name="thumb_cmc_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="0 0.8268" />
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="thumb_metacarpals" />
+                        <geom type="mesh" rgba="1 1 1 1" mesh="thumb_metacarpals" />
+                        <body name="site_R_thumb_metacarpals_side" pos="0.018 0 0.025">
+                        <site name="site_R_thumb_metacarpals_side" rgba="1 0 0 1"/> 
+                        <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                        </body>
+                        <body name="thumb_proximal" pos="0.00816453 -0.00145 0.0556339">
+                            <inertial pos="-0.00245378 0.001866 0.0134437" quat="0.698586 0.105935 0.112319 0.69867" mass="0.00522968" diaginertia="6.21193e-07 4.74349e-07 1.99534e-07" />
+                            <joint name="thumb_mcp" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.2908" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" mesh="thumb_proximal" />
+                            <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="thumb_proximal" />
+                            <body name="site_R_thumb_proximal_side" pos="0.005 0 0.02">
+                            <site name="site_R_thumb_proximal_side" rgba="1 0 0 1"/> 
+                            <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                            </body>
+                            <body name="thumb_distal" pos="-0.00154751 0.0015 0.0345281">
+                                <inertial pos="0.00042744 2.06994e-05 0.00928733" quat="0.968046 0.000984305 -0.25077 0.00104917" mass="0.00521853" diaginertia="4.02749e-07 3.45759e-07 2.21275e-07" />
+                                <joint name="thumb_ip" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.3781" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.796078 0.823529 0.937255 1" mesh="thumb_distal" />
+                                <geom type="mesh" rgba="0.796078 0.823529 0.937255 0.5" mesh="thumb_distal" />
+                                <geom pos="-0.00661703 -4.99999e-05 0.0315677" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="thumb_Virtual_Point" />
+                                <geom pos="-0.00661703 -4.99999e-05 0.0315677" type="mesh" rgba="1 1 1 1" mesh="thumb_Virtual_Point" />
+                                <body name="site_thumb" pos="-0.005 0.0 0.028">
+                                <site name="site_thumb" rgba="1 0 0 1"/> 
+                                <!-- <geom class="robot0:D_Vizual" name="site_thumb_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
+                                </body>
+                                <body name="site_R_thumb_distal" pos="0 0 0.023">
+                                <site name="site_R_thumb_distal" rgba="1 0 0 1"/> 
+                                <!-- <geom  name="site_R_thumb_distal_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+            <body name="index_metacarpals" pos="-0.0072 0.0307784 0.119356">
+                <inertial pos="0.00148754 -5.49503e-09 0.00201933" quat="0.29084 0.29084 -0.644525 0.644525" mass="0.00107972" diaginertia="3.88428e-08 3.30033e-08 2.11264e-08" />
+                <joint name="index_mcp_roll" pos="0 0 0" axis="-1 0 0" limited="true" range="-0.2616 0.2616" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" mesh="index_metacarpals" />
+                <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="index_metacarpals" />
+                <body name="index_proximal" pos="0.0073698 0 0">
+                    <inertial pos="-0.0011507 -2.08334e-05 0.0212647" quat="0.999666 -4.56694e-05 -0.022405 -0.0129055" mass="0.00477957" diaginertia="5.45579e-07 5.41638e-07 1.74851e-07" />
+                    <joint name="index_mcp_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.3519" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="index_proximal" />
+                    <geom type="mesh" rgba="1 1 1 1" mesh="index_proximal" />
+                    <body name="site_R_index_proximal_side" pos="0.005 0 0.023">
+                    <site name="site_R_index_proximal_side" rgba="1 0 0 1"/> 
+                    <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                    </body>
+                    <body name="index_middle" pos="-0.00305282 0 0.0399071">
+                        <inertial pos="0.000582799 -1.66624e-05 0.0134419" quat="0.999711 -0.000104536 -0.0240474 3.13489e-05" mass="0.00270775" diaginertia="2.25818e-07 1.61875e-07 1.1765e-07" />
+                        <joint name="index_pip" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.52" />
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0 0 0 1" mesh="index_middle" />
+                        <geom type="mesh" rgba="0 0 0 1" mesh="index_middle" />
+                        <body name="site_R_index_middle_side" pos="0.006 0 0.018">
+                        <site name="site_R_index_middle_side" rgba="1 0 0 1"/> 
+                        <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                        </body>
+                        <body name="index_distal" pos="0.00530686 0 0.0265923">
+                            <inertial pos="-0.00721804 -3.10463e-05 0.00510708" quat="0.953111 -0.00184506 -0.302605 -0.00250094" mass="0.00258312" diaginertia="1.59621e-07 1.36696e-07 7.18448e-08" />
+                            <joint name="index_dip" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.369" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" mesh="index_distal" />
+                            <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="index_distal" />
+                            <geom pos="-0.0152816 0 0.0240372" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="index_Virtual_Point" />
+                            <geom pos="-0.0152816 0 0.0240372" type="mesh" rgba="1 1 1 1" mesh="index_Virtual_Point" />
+                            <body name="site_index" pos="-0.013 0.0 0.02">
+                            <site name="site_index" rgba="1 0 0 1"/> 
+                            <!-- <geom class="robot0:D_Vizual" name="site_thumb_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
+                            </body>
+                            <body name="site_R_index_distal" pos="-0.007 0 0.015">
+                            <site name="site_R_index_distal" rgba="1 0 0 1"/> 
+                            <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+            <body name="middle_metacarpals" pos="-0.00720003 0.00666068 0.119356">
+                <inertial pos="0.00148754 3.28887e-06 0.00201933" quat="0.291076 0.290602 -0.644 0.64505" mass="0.00107972" diaginertia="3.88428e-08 3.30033e-08 2.11264e-08" />
+                <joint name="middle_mcp_roll" pos="0 0 0" axis="-1 0 0" limited="true" range="-0.26 0.26" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" mesh="middle_metacarpals" />
+                <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="middle_metacarpals" />
+                <body name="middle_proximal" pos="0.0073698 0 0">
+                    <inertial pos="-0.00165985 6.3095e-05 0.023622" quat="0.999606 -0.00132027 -0.028033 -0.000925014" mass="0.00551224" diaginertia="7.80878e-07 7.60604e-07 2.04067e-07" />
+                    <joint name="middle_mcp_pitch" pos="0 0 0" axis="0 0.999999 -0.00163143" limited="true" range="0 1.35" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" mesh="middle_proximal" />
+                    <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="middle_proximal" />
+                    <body name="site_R_middle_proximal_side" pos="0.0045 0 0.026">
+                    <site name="site_R_middle_proximal_side" rgba="1 0 0 1"/> 
+                    <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                    </body>
+                    <body name="middle_middle" pos="-0.004144 7.3133e-05 0.044828">
+                        <inertial pos="-0.000230368 5.52667e-05 0.0161975" quat="0.999153 -0.000671338 -0.0411524 -0.000185769" mass="0.00314205" diaginertia="3.21356e-07 2.47016e-07 1.3458e-07" />
+                        <joint name="middle_pip" pos="0 0 0" axis="0 0.999999 -0.0016314" limited="true" range="0 1.814" />
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="middle_middle" />
+                        <geom type="mesh" rgba="1 1 1 1" mesh="middle_middle" />
+                        <body name="site_R_middle_middle_side" pos="0.005 0 0.022">
+                        <site name="site_R_middle_middle_side" rgba="1 0 0 1"/> 
+                        <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                        </body>
+                        <body name="middle_distal" pos="0.00362954 5.15731e-05 0.0316123">
+                            <inertial pos="-0.00724924 -2.27865e-05 0.00506276" quat="0.952177 -0.00261407 -0.305528 -0.00225731" mass="0.00258313" diaginertia="1.59621e-07 1.36696e-07 7.18448e-08" />
+                            <joint name="middle_dip" pos="0 0 0" axis="0 0.999999 -0.00163143" limited="true" range="0 1.256" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" mesh="middle_distal" />
+                            <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="middle_distal" />
+                            <geom pos="-0.0154288 3.90612e-05 0.0239429" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="middle_Virtual_Point" />
+                            <geom pos="-0.0154288 3.90612e-05 0.0239429" type="mesh" rgba="1 1 1 1" mesh="middle_Virtual_Point" />
+                            <body name="site_middle" pos="-0.014 0.0 0.021">
+                            <site name="site_middle" rgba="1 0 0 1"/> 
+                            <!-- <geom class="robot0:D_Vizual" name="site_thumb_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
+                            </body>
+                            <body name="site_R_middle_distal" pos="-0.008 0 0.016">
+                            <site name="site_R_middle_distal" rgba="1 0 0 1"/> 
+                            <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+            <body name="ring_proximal" pos="0.0001598 -0.013573 0.11972">
+                <inertial pos="-0.00161802 -2.0822e-05 0.0212342" quat="0.999359 9.53848e-05 -0.0333935 -0.0128948" mass="0.00477953" diaginertia="5.45577e-07 5.41638e-07 1.7485e-07" />
+                <joint name="ring_mcp_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.55" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="ring_proximal" />
+                <geom type="mesh" rgba="1 1 1 1" mesh="ring_proximal" />
+                <body name="site_R_ring_proximal_side" pos="0.0045 0 0.023">
+                <site name="site_R_ring_proximal_side" rgba="1 0 0 1"/> 
+                <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                </body>
+                <body name="ring_middle" pos="-0.0039295 0 0.03983">
+                    <inertial pos="0.000940341 -1.66668e-05 0.0134216" quat="0.999942 -0.000103876 -0.0107411 3.34326e-05" mass="0.00270775" diaginertia="2.25818e-07 1.61876e-07 1.1765e-07" />
+                    <joint name="ring_pip" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.439" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0 0 0 1" mesh="ring_middle" />
+                    <geom type="mesh" rgba="0 0 0 1" mesh="ring_middle" />
+                    <body name="site_R_ring_middle_side" pos="0.0065 0 0.018">
+                    <site name="site_R_ring_middle_side" rgba="1 0 0 1"/> 
+                    <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                    </body>
+                    <body name="ring_distal" pos="0.00601276 0 0.0264415">
+                        <inertial pos="-0.00679316 -3.1045e-05 0.00565988" quat="0.964301 -0.0019406 -0.26479 -0.00242461" mass="0.00258311" diaginertia="1.5962e-07 1.36695e-07 7.18448e-08" />
+                        <joint name="ring_dip" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.3257" />
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" mesh="ring_distal" />
+                        <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="ring_distal" />
+                        <geom pos="-0.01334 0 0.025167" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="ring_Virtual_Point" />
+                        <geom pos="-0.01334 0 0.025167" type="mesh" rgba="1 1 1 1" mesh="ring_Virtual_Point" />
+                        <body name="site_ring" pos="-0.012 0.0 0.021">
+                        <site name="site_ring" rgba="1 0 0 1"/> 
+                        <!-- <geom class="robot0:D_Vizual" name="site_thumb_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
+                        </body>
+                        <body name="site_R_ring_distal" pos="-0.006 0 0.016">
+                        <site name="site_R_ring_distal" rgba="1 0 0 1"/> 
+                        <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                        </body>
+                    </body>
+                </body>
+            </body>
+            <body name="pinky_proximal" pos="0.000159803 -0.0336303 0.112716">
+                <inertial pos="-0.00161802 -2.08215e-05 0.0212342" quat="0.999359 9.53674e-05 -0.0333935 -0.0128945" mass="0.00477953" diaginertia="5.45578e-07 5.41638e-07 1.7485e-07" />
+                <joint name="pinky_mcp_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.535" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="pinky_proximal" />
+                <geom type="mesh" rgba="1 1 1 1" mesh="pinky_proximal" />
+                <body name="site_R_pinky_proximal_side" pos="0.0045 0 0.023">
+                <site name="site_R_pinky_proximal_side" rgba="1 0 0 1"/> 
+                <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                </body>
+                <body name="pinky_middle" pos="-0.0039295 0 0.0398303">
+                    <inertial pos="0.000940341 -1.66665e-05 0.0134216" quat="0.999942 -0.000103836 -0.0107411 3.34302e-05" mass="0.00270775" diaginertia="2.25818e-07 1.61876e-07 1.1765e-07" />
+                    <joint name="pinky_pip" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.413" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0 0 0 1" mesh="pinky_middle" />
+                    <geom type="mesh" rgba="0 0 0 1" mesh="pinky_middle" />
+                    <body name="site_R_pinky_middle_side" pos="0.0065 0 0.018">
+                    <site name="site_R_pinky_middle_side" rgba="1 0 0 1"/> 
+                    <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                    </body>
+                    <body name="pinky_distal" pos="0.0060127 0 0.0264416">
+                        <inertial pos="-0.00679323 -3.10448e-05 0.0056598" quat="0.964299 -0.00194058 -0.264796 -0.00242463" mass="0.00258312" diaginertia="1.5962e-07 1.36695e-07 7.18448e-08" />
+                        <joint name="pinky_dip" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.325" />
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 1" mesh="pinky_distal" />
+                        <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="pinky_distal" />
+                        <geom pos="-0.0133405 0 0.0251664" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="pinky_Virtual_Point" />
+                        <geom pos="-0.0133405 0 0.0251664" type="mesh" rgba="1 1 1 1" mesh="pinky_Virtual_Point" />
+                        <body name="site_pinky" pos="-0.012 0.0 0.021">
+                        <site name="site_pinky" rgba="1 0 0 1"/> 
+                        <!-- <geom class="robot0:D_Vizual" name="site_thumb_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
+                        </body>
+                        <body name="site_R_pinky_distal" pos="-0.006 0 0.016">
+                        <site name="site_R_pinky_distal" rgba="1 0 0 1"/> 
+                        <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <contact>
+        <exclude body1="hand_base" body2="index_metacarpals"/>
+        <exclude body1="hand_base" body2="index_proximal"/>
+        <exclude body1="hand_base" body2="middle_metacarpals"/>
+        <exclude body1="hand_base" body2="middle_proximal"/>
+        <exclude body1="hand_base" body2="ring_proximal"/>
+        <exclude body1="hand_base" body2="pinky_proximal"/>
+        <exclude body1="hand_base" body2="thumb_metacarpals_base1"/>
+        <exclude body1="hand_base" body2="thumb_metacarpals_base2"/>
+        <exclude body1="hand_base" body2="thumb_metacarpals"/>
+        <exclude body1="hand_base" body2="thumb_proximal"/>
+        <exclude body1="thumb_metacarpals_base1" body2="thumb_proximal"/>
+        <exclude body1="thumb_metacarpals_base1" body2="thumb_metacarpals_base2"/>
+        <exclude body1="thumb_metacarpals_base2" body2="thumb_proximal"/>
+        <exclude body1="thumb_proximal" body2="thumb_distal"/>
+        <exclude body1="middle_metacarpals" body2="index_proximal"/>
+        <exclude body1="middle_metacarpals" body2="middle_proximal"/>
+    </contact>
+
+    <tendon>
+        <fixed name="thumb_tendon" limited="true" range="-0.001 0.001">
+            <joint joint="thumb_mcp" coef="0.00705"/>
+            <joint joint="thumb_ip" coef="-0.0085" />
+        </fixed>
+        <fixed name="index_tendon" limited="true" range="-0.001 0.001">
+            <joint joint="index_pip" coef="0.00705"/>
+            <joint joint="index_dip" coef="-0.0085" />
+        </fixed>
+        <fixed name="middle_tendon" limited="true" range="-0.001 0.001">
+            <joint joint="middle_pip" coef="0.00705"/>
+            <joint joint="middle_dip" coef="-0.0085" />
+        </fixed>
+        <fixed name="ring_tendon" limited="true" range="-0.001 0.001">
+            <joint joint="ring_mcp_pitch" coef="-0.00705"/>
+            <joint joint="ring_pip" coef="0.0025"/>
+            <joint joint="ring_dip" coef="0.0015" />
+        </fixed>
+        <fixed name="pinky_tendon" limited="true" range="-0.001 0.001">
+            <joint joint="pinky_mcp_pitch" coef="-0.00705"/>
+            <joint joint="pinky_pip" coef="0.0025"/>
+            <joint joint="pinky_dip" coef="0.0015" />
+        </fixed>
+    </tendon>
+
+    <actuator>
+        <position name="index_joint_1" joint="index_mcp_roll" class="thumb_base"/>
+        <position name="index_joint_2" joint="index_mcp_pitch" class="thumb_base"/>
+        <position name="index_tendon_a" joint="index_pip" class="thumb_base"/>
+        <position name="middle_joint_1" joint="middle_mcp_roll" class="thumb_base"/>
+        <position name="middle_joint_2" joint="middle_mcp_pitch" class="thumb_base"/>
+        <position name="middle_tendon_a" joint="middle_pip" class="thumb_base"/>
+        <position name="ring_tendon_a" joint="ring_mcp_pitch" class="thumb_base"/>
+        <position name="pinky_tendon_a" joint="pinky_mcp_pitch" class="thumb_base"/>
+        <position name="thumb_tendon_b" joint="thumb_mcp" class="thumb_base"/>
+        <position name="thumb_joint_1" joint="thumb_cmc_roll" class="thumb_base"/>
+        <position name="thumb_joint_2" joint="thumb_cmc_yaw" class="thumb_base"/>
+        <position name="thumb_joint_3" joint="thumb_cmc_pitch" class="thumb_base"/>
+    </actuator>
+</mujoco>

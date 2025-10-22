@@ -1,0 +1,23 @@
+{
+    "base_child": [],
+    "hand_base": [],
+    "thumb_metacarpals_base1_child": [],
+    "thumb_metacarpals_base2_child": [],
+    "thumb_metacarpals_child": [],
+    "thumb_proximal_child": [],
+    "thumb_distal_child": [[0.0, 0.0, 0.0], [-0.005, 0.0, 0.028]],
+    "index_metacarpals_child": [],
+    "index_proximal_child": [[0.005, 0, 0.023]],
+    "index_middle_child": [[0.006, 0, 0.018]],
+    "index_distal_child": [[-0.02, 0.0, 0.035]],
+    "middle_metacarpals_child": [],
+    "middle_proximal_child": [],
+    "middle_middle_child": [],
+    "middle_distal_child": [],
+    "ring_proximal_child": [],
+    "ring_distal_child": [],
+    "ring_middle_child": [],
+    "pinky_proximal_child": [],
+    "pinky_middle_child": [],
+    "pinky_distal_child": []
+}
