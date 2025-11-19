@@ -99,7 +99,7 @@ print('running on', device)
 
 
 # TODO： modify the grasp file name
-grasp_file = "dexycb_robot_joint_dict_1021_0045_omnihand"
+grasp_file = "dexycb_robot_joint_dict_1030_1525_omnihand"
 result_path = "/home/guizhewei/guizhewei/grasp_pose_dataset/unoptimized"
 data_dict = np.load(os.path.join(result_path, grasp_file + '.npy'), allow_pickle=True)
 object_code_list = []
@@ -115,8 +115,15 @@ for data in data_dict:
     rot = data['hand_rot6d']
     hand_pose = torch.tensor([qpos[name] for name in translation_names] + rot + [qpos[name] for name in joint_names], dtype=torch.float, device=device)
     hand_pose_list.append(torch.tensor([qpos[name] for name in translation_names] + rot + [qpos[name] for name in joint_names], dtype=torch.float, device=device))
+    # if args.object_code is not None:
+    #     break
+# 检查是否加载到数据
+if len(hand_pose_list) == 0:
     if args.object_code is not None:
-        break
+        raise ValueError(f"未找到匹配的 object_code: {args.object_code}。请检查数据文件中是否存在该对象代码。")
+    else:
+        raise ValueError("数据文件为空，未加载到任何数据。")
+
 hand_pose_tensor = torch.stack([hp.to('cuda:0').view(-1) for hp in hand_pose_list], dim=0)
 
 total_batch_size = len(object_code_list) * args.batch_size
@@ -130,6 +137,7 @@ hand_model = HandModel(
     mesh_path='/home/guizhewei/guizhewei/DexGraspNet/grasp_generation/mjcf/franka_omnihand_mjcf',
     contact_points_path='/home/guizhewei/guizhewei/DexGraspNet/grasp_generation/mjcf/contact_points_omnihand.json',
     penetration_points_path='/home/guizhewei/guizhewei/DexGraspNet/grasp_generation/mjcf/penetration_points_omnihand.json',
+    n_surface_points = 2000,
     device=device
     )
 
@@ -200,13 +208,14 @@ weight_dict = dict(
     w_spen=args.w_spen,
     w_joints=args.w_joints,
 )
-energy, E_fc, E_dis, E_pen, E_spen, E_joints = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
+energy, E_fc, E_dis, E_pen, E_spen, E_joints, E_cmap = cal_energy(hand_model, object_model, verbose=True, **weight_dict)
 print('Initial energy:', energy.mean().item(),
       ' E_fc:', E_fc.mean().item(),
       ' E_dis:', E_dis.mean().item(),
       ' E_pen:', E_pen.mean().item(),   
     ' E_spen:', E_spen.mean().item(),
-        ' E_joints:', E_joints.mean().item())
+        ' E_joints:', E_joints.mean().item(),
+        ' E_cmap:', E_cmap.mean().item())
 energy.sum().backward(retain_graph=True)
 logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, 0, show=True)
 pbar = tqdm(range(1, args.n_iter + 1), desc='optimizing', dynamic_ncols=True)
@@ -225,6 +234,7 @@ for step in pbar:
         E_dis[accept] = new_E_dis[accept]
         E_fc[accept] = new_E_fc[accept]
         E_pen[accept] = new_E_pen[accept]
+        E_spen[accept] = new_E_spen[accept]
         E_joints[accept] = new_E_joints[accept]
 
         logger.log(energy, E_fc, E_dis, E_pen, E_spen, E_joints, step, show=False)
@@ -235,7 +245,8 @@ for step in pbar:
             "dis": f"{E_dis.mean().item():.3f}",
             "pen": f"{E_pen.mean().item():.3f}",
             "spen": f"{E_spen.mean().item():.3f}",
-            "joints": f"{E_joints.mean().item():.3f}"
+            "joints": f"{E_joints.mean().item():.3f}",
+            "cmap": f"{E_cmap.mean().item():.3f}"
         })
 
 
@@ -296,6 +307,7 @@ for i in range(len(object_code_list)):
             E_fc=E_fc[idx].item(),
             E_dis=E_dis[idx].item(),
             E_pen=E_pen[idx].item(),
+            E_spen=E_spen[idx].item(),
             E_joints=E_joints[idx].item(),
             idx=obj_idx[i],
         ))

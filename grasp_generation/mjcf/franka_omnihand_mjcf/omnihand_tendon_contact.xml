@@ -1,6 +1,6 @@
 
 <mujoco model="rm_75_description">
-  <!-- <compiler angle="radian" autolimits="true"/> -->
+  <compiler angle="radian"/>
   <statistic meansize="0.119253" extent="0.945417" center="-2.961e-06 0.00561221 0.418652"/>
   <asset>
     <material name="robot0:MatViz" specular="0.75" shininess="0.1" reflectance="0.5" rgba="0.93 0.93 0.93 1"></material>
@@ -61,7 +61,7 @@
         <site type="sphere" size="0.001" rgba="0 1 1 1"/>
     </default>
     <default class="graspnet_pen">
-        <site type="sphere" size="0.01" rgba="1 0 1 1"/>
+        <site type="sphere" size="0.01" rgba="1 0 1 0.5"/>
     </default>
 
     <!-- New Hand XML -->
@@ -83,14 +83,12 @@
         <body name="hand_base" pos="0 -0.1 0">
           <!-- <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.792157 0.819608 0.933333 0.2" mesh="hand_base_link"/> -->
           <!-- <geom type="mesh" rgba="0.792157 0.819608 0.933333 0.2" mesh="hand_base_link" /> -->
-          <geom class="plastic_visual" mesh="hand_base_link" pos="0 0.1 0"/>
+          <geom type="mesh" class="plastic_visual" mesh="hand_base_link" pos="0 0.1 0"/>
           <geom size="0.032 0.005" pos="0 0.1 0.005" type="cylinder" class="plastic_collision" />
           <geom size="0.025 0.045 0.05" pos="0 0.1 0.062" type="box" class="plastic_collision" />
           <body name="site_R_hand_centre" pos="0.025 0 0.07">
-            <site name="site_R_hand_centre" rgba="1 0 0 1"/> 
           </body>
           <body name="site_wrist" pos="0 0 0" euler="-1.57079 -0.0 -0.0">
-            <site name="site_wrist" rgba="1 0 0 1"/> 
             <!-- <geom name="site_wrist_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
           </body>
           <body name="site_R_hand_base" pos="0 0.1 0">
@@ -154,23 +152,34 @@
                       <site name="site_R_thumb_metacarpals_side" rgba="1 0 0 1"/> 
                       <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
                     </body>
-                    <site name="graspnet_thumb_proximal_1" pos="0.021 -0.003 0.015" class="graspnet"/>
-                    <site name="graspnet_thumb_proximal_2" pos="0.021 -0.003 0.020" class="graspnet"/>
-                    <site name="graspnet_thumb_proximal_3" pos="0.022 -0.003 0.025" class="graspnet"/>
-                    <site name="graspnet_thumb_proximal_4" pos="0.022 -0.003 0.030" class="graspnet"/>
-                    <site name="graspnet_thumb_proximal_5" pos="0.022 -0.003 0.035" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_1" pos="0.021 -0.003 0.000" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_2" pos="0.021 -0.003 0.010" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_3" pos="0.021 -0.003 0.020" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_4" pos="0.021 -0.003 0.030" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_5" pos="0.021 -0.003 0.040" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_6" pos="0.021 -0.003 0.050" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_7" pos="0.021 -0.003 0.060" class="graspnet"/>
 
-                    <site name="graspnet_thumb_proximal_6" pos="0.021 0.003 0.015" class="graspnet"/>
-                    <site name="graspnet_thumb_proximal_7" pos="0.021 0.003 0.020" class="graspnet"/>
-                    <site name="graspnet_thumb_proximal_8" pos="0.022 0.003 0.025" class="graspnet"/>
-                    <site name="graspnet_thumb_proximal_9" pos="0.022 0.003 0.030" class="graspnet"/>
-                    <site name="graspnet_thumb_proximal_10" pos="0.022 0.003 0.035" class="graspnet"/>
-
+                    <site name="graspnet_thumb_proximal_8" pos="0.021 0.003 0.000" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_9" pos="0.021 0.003 0.010" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_10" pos="0.021 0.003 0.020" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_11" pos="0.021 0.003 0.030" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_12" pos="0.021 0.003 0.040" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_13" pos="0.021 0.003 0.050" class="graspnet"/>
+                    <site name="graspnet_thumb_proximal_14" pos="0.021 0.003 0.060" class="graspnet"/>
+                    <body name="thumb_metacarpals_child">
+                      <site name="graspnet_thumb_metacarpals_pen_0" pos="0.015 0 0.020" class="graspnet_pen"/>
+                    </body>
                     <body name="thumb_proximal" pos="0.00816453 -0.00145 0.0556339">
                         <inertial pos="-0.00245378 0.001866 0.0134437" quat="0.698586 0.105935 0.112319 0.69867" mass="0.00522968" diaginertia="6.21193e-07 4.74349e-07 1.99534e-07" />
                         <joint name="thumb_mcp" pos="0 0 0" axis="0 -1 0" range="-1.29 0" class="hand_joint"/>
                         <geom size="0.01 0.01" pos="0 0.002 0.02" type="cylinder" class="plastic_collision" />
                         <geom type="mesh" mesh="thumb_proximal" class="plastic_visual"/>
+
+                        <body name="thumb_proximal_child">
+                          <site name="graspnet_thumb_proximal_pen_0" pos="0.005 0.00145 -0.01" class="graspnet_pen"/>
+                          <site name="graspnet_thumb_proximal_pen_1" pos="0.003 0.001866 0.015" class="graspnet_pen"/>
+                        </body>
                         <body name="site_R_thumb_proximal_side" pos="0.005 0.001866 0.02">
                           <site name="site_R_thumb_proximal_side" rgba="1 0 0 1"/> 
                           <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
@@ -189,6 +198,10 @@
                             <joint name="thumb_ip" pos="0 0 0" axis="0 -1 0" limited="true" range="-1.37 0" class="hand_joint"/>
                             <geom type="mesh" mesh="thumb_distal" class="plastic_collision"/>
                             <geom type="mesh" mesh="thumb_distal" class="plastic_visual"/>
+                            <body name="thumb_distal_child">
+                                <site name="graspnet_thumb_distal_pen_0" pos="0.002 0.0 0.005" class="graspnet_pen"/>
+                                <site name="graspnet_thumb_distal_pen_1" pos="-0.002 0 0.025" class="graspnet_pen"/>
+                            </body>
                             <body name="site_thumb" pos="-0.005 0.0 0.028">
                               <site name="site_thumb" rgba="1 0 0 1"/> 
                               <!-- <geom class="robot0:D_Vizual" name="site_thumb_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
@@ -201,8 +214,6 @@
                               <site name="graspnet_thumb_distal_6" rgba="0 1 1 1" pos="0.010 0.003 -0.005" class="graspnet"/>
                               <site name="graspnet_thumb_distal_7" rgba="0 1 1 1" pos="0.008 0.003 -0.002" class="graspnet"/>
                               <site name="graspnet_thumb_distal_8" rgba="0 1 1 1" pos="0.005 0.003 0.001" class="graspnet"/>
-                              <site name="graspnet_thumb_distal_pen_0" pos="0 0 0" class="graspnet_pen"/>
-                              <site name="graspnet_thumb_distal_pen_1" pos="0.010 0.0 -0.028" class="graspnet_pen"/>
                             </body>
                             <body name="site_R_thumb_distal" pos="0 0 0.023">
                               <site name="site_R_thumb_distal" rgba="1 0 0 1"/> 
@@ -222,31 +233,35 @@
                 <joint name="index_mcp_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.5" class="hand_joint"/>
                 <geom size="0.009 0.015" pos="-0.002 0 0.016" type="capsule" class="plastic_collision"/>
                 <geom type="mesh" mesh="index_proximal" class="plastic_visual"/>
+                <body name="index_proximal_child">
+                  <site name="graspnet_index_proximal_pen_0" pos="0 0 0.015" class="graspnet_pen"/>
+                </body>
+
                 <body name="site_R_index_proximal_side" pos="0.005 0 0.023">
                   <site name="site_R_index_proximal_side" rgba="1 0 0 1"/> 
                   <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
-                  <site name="graspnet_index_proximal_1" rgba="0 1 1 1" pos="0.005 0.0 -0.004" class="graspnet" /> 
-                  <site name="graspnet_index_proximal_2" rgba="0 1 1 1" pos="0.005 0.0 -0.002" class="graspnet"/> 
-                  <site name="graspnet_index_proximal_3" rgba="0 1 1 1" pos="0.005 0.0 0.00" class="graspnet"/> 
-                  <site name="graspnet_index_proximal_4" rgba="0 1 1 1" pos="0.005 0.0 0.002" class="graspnet"/> 
-                  <site name="graspnet_index_proximal_5" rgba="0 1 1 1" pos="0.005 0.0 0.004" class="graspnet"/> 
-                
-                  <site name="graspnet_index_proximal_pen_0" pos="0 0 0" class="graspnet_pen"/>
+                  <site name="graspnet_index_proximal_1" rgba="0 1 1 1" pos="0.002 0.0 -0.022" class="graspnet" /> 
+                  <site name="graspnet_index_proximal_2" rgba="0 1 1 1" pos="0.002 0.0 -0.014" class="graspnet"/> 
+                  <site name="graspnet_index_proximal_3" rgba="0 1 1 1" pos="0.002 0.0 -0.006" class="graspnet"/> 
+                  <site name="graspnet_index_proximal_4" rgba="0 1 1 1" pos="0.002 0.0 0.002" class="graspnet"/> 
+                  <site name="graspnet_index_proximal_5" rgba="0 1 1 1" pos="0.002 0.0 0.010" class="graspnet"/> 
                 </body>
                 <body name="index_middle" pos="-0.00305282 0 0.0399071">
                     <inertial pos="0.000582799 -1.66624e-05 0.0134419" quat="0.999711 -0.000104536 -0.0240474 3.13489e-05" mass="0.00270775" diaginertia="2.25818e-07 1.61875e-07 1.1765e-07" />
                     <joint name="index_pip" pos="0 0 0" axis="0 1 0" range="0 1.57" class="hand_joint"/>
                     <geom size="0.009 0.010" pos="0.001 0 0.015" type="capsule" class="plastic_collision"/>
                     <geom type="mesh" mesh="index_middle" class="plastic_visual"/>
+                    <body name="index_middle_child">
+                      <site name="graspnet_index_pen_0" pos="0.003 0 0.0" class="graspnet_pen"/>
+                    </body>
                     <body name="site_R_index_middle_side" pos="0.006 0 0.018">
                       <site name="site_R_index_middle_side" rgba="1 0 0 1"/> 
                       <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
-                      <site name="graspnet_index_pen_0" pos="0 0 0" class="graspnet_pen"/>
-                      <site name="graspnet_index_1" rgba="0 1 1 1" pos="0.005 0 -0.004" class="graspnet" /> 
-                      <site name="graspnet_index_2" rgba="0 1 1 1" pos="0.005 0 -0.002" class="graspnet"/> 
-                      <site name="graspnet_index_3" rgba="0 1 1 1" pos="0.005 0 0.000" class="graspnet"/> 
-                      <site name="graspnet_index_4" rgba="0 1 1 1" pos="0.005 0 0.002" class="graspnet" /> 
-                      <site name="graspnet_index_5" rgba="0 1 1 1" pos="0.005 0 0.004" class="graspnet"/> 
+                      <site name="graspnet_index_1" rgba="0 1 1 1" pos="0.004 0 -0.012" class="graspnet" /> 
+                      <site name="graspnet_index_2" rgba="0 1 1 1" pos="0.004 0 -0.007" class="graspnet"/> 
+                      <site name="graspnet_index_3" rgba="0 1 1 1" pos="0.004 0 -0.002" class="graspnet"/> 
+                      <site name="graspnet_index_4" rgba="0 1 1 1" pos="0.004 0 0.003" class="graspnet" /> 
+                      <site name="graspnet_index_5" rgba="0 1 1 1" pos="0.004 0 0.008" class="graspnet"/> 
                     </body>
                     <body name="index_distal" pos="0.00530686 0 0.0265923">
                         <site name="R_index_tactile_sit" pos="-0.006 0 0.015" quat="0 -0.3826834 0 0.9238795"
@@ -258,6 +273,10 @@
                         <geom type="mesh" mesh="index_distal" class="plastic_visual"/>
                         <!-- <geom pos="-0.0152816 0 0.0240372" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="index_Virtual_Point" />
                         <geom pos="-0.0152816 0 0.0240372" type="mesh" rgba="1 1 1 1" mesh="index_Virtual_Point" /> -->
+                        <body name="index_distal_child">
+                          <site name="graspnet_index_pen_1" pos="-0.005 0 -0.002" class="graspnet_pen"/>
+                          <site name="graspnet_index_pen_2" pos="-0.009 0 0.016" class="graspnet_pen"/>
+                        </body>
                         <body name="site_index" pos="-0.013 0.0 0.02">
                           <site name="site_index" rgba="1 0 0 1"/> 
                           <!-- <geom class="robot0:D_Vizual" name="site_thumb_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
@@ -265,7 +284,6 @@
                         <body name="site_R_index_distal" pos="-0.007 0 0.015">
                           <site name="site_R_index_distal" rgba="1 0 0 1"/> 
                           <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
-                          <site name="graspnet_index_pen_1" pos="0 0 0" class="graspnet_pen"/>
                           <site name="graspnet_index_6" rgba="0 1 1 1" pos="0.009 0 -0.006" class="graspnet" /> 
                           <site name="graspnet_index_7" rgba="0 1 1 1" pos="0.008 0 -0.003" class="graspnet"/> 
                           <site name="graspnet_index_8" rgba="0 1 1 1" pos="0.006 0 0.000" class="graspnet"/> 
@@ -284,28 +302,36 @@
                 <joint name="middle_mcp_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.49" class="hand_joint"/>
                 <geom size="0.009 0.015" pos="-0.002 0 0.016" type="capsule" class="plastic_collision" />
                 <geom type="mesh" mesh="middle_proximal" class="plastic_visual" />
+                
+                <body name="middle_proximal_child">
+                  <site name="graspnet_middle_proximal_pen_0" pos="0 0 0.015" class="graspnet_pen"/>
+                </body>
                 <body name="site_R_middle_proximal_side" pos="0.0045 0 0.026">
                   <site name="site_R_middle_proximal_side" rgba="1 0 0 1"/> 
                   <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
-                <site name="graspnet_middle_proximal_1" rgba="0 1 1 1" pos="0.005 0.0 -0.004" class="graspnet" /> 
-                <site name="graspnet_middle_proximal_2" rgba="0 1 1 1" pos="0.005 0.0 -0.002" class="graspnet"/> 
-                <site name="graspnet_middle_proximal_3" rgba="0 1 1 1" pos="0.005 0.0 0.00" class="graspnet"/> 
-                <site name="graspnet_middle_proximal_4" rgba="0 1 1 1" pos="0.005 0.0 0.002" class="graspnet"/> 
-                <site name="graspnet_middle_proximal_5" rgba="0 1 1 1" pos="0.005 0.0 0.004" class="graspnet"/>
+                <site name="graspnet_middle_proximal_1" rgba="0 1 1 1" pos="0.002 0.0 -0.025" class="graspnet" /> 
+                <site name="graspnet_middle_proximal_2" rgba="0 1 1 1" pos="0.002 0.0 -0.017" class="graspnet"/> 
+                <site name="graspnet_middle_proximal_3" rgba="0 1 1 1" pos="0.002 0.0 -0.009" class="graspnet"/> 
+                <site name="graspnet_middle_proximal_4" rgba="0 1 1 1" pos="0.002 0.0 -0.001" class="graspnet"/> 
+                <site name="graspnet_middle_proximal_5" rgba="0 1 1 1" pos="0.002 0.0 0.007" class="graspnet"/>
                 </body>
                 <body name="middle_middle" pos="-0.004144 7.3133e-05 0.044828">
                     <inertial pos="-0.000230368 5.52667e-05 0.0161975" quat="0.999153 -0.000671338 -0.0411524 -0.000185769" mass="0.00314205" diaginertia="3.21356e-07 2.47016e-07 1.3458e-07" />
                     <joint name="middle_pip" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.57" class="hand_joint"/>
                     <geom size="0.009 0.010" pos="0.001 0 0.014" type="capsule" class="plastic_collision" />
                     <geom type="mesh" mesh="middle_middle" class="plastic_visual" />
+                    
+                    <body name="middle_middle_child">
+                      <site name="graspnet_middle_pen_0" pos="0.003 0 -0.005" class="graspnet_pen"/>
+                    </body>
                     <body name="site_R_middle_middle_side" pos="0.005 0 0.022">
                       <site name="site_R_middle_middle_side" rgba="1 0 0 1"/> 
                       <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
-                    <site name="graspnet_middle_1" rgba="0 1 1 1" pos="0.005 0 -0.004" class="graspnet" /> 
-                    <site name="graspnet_middle_2" rgba="0 1 1 1" pos="0.005 0 -0.002" class="graspnet"/> 
-                    <site name="graspnet_middle_3" rgba="0 1 1 1" pos="0.005 0 0.000" class="graspnet"/> 
-                    <site name="graspnet_middle_4" rgba="0 1 1 1" pos="0.005 0 0.002" class="graspnet" /> 
-                    <site name="graspnet_middle_5" rgba="0 1 1 1" pos="0.004 0 0.004" class="graspnet"/> 
+                    <site name="graspnet_middle_1" rgba="0 1 1 1" pos="0.005 0 -0.017" class="graspnet" /> 
+                    <site name="graspnet_middle_2" rgba="0 1 1 1" pos="0.005 0 -0.012" class="graspnet"/> 
+                    <site name="graspnet_middle_3" rgba="0 1 1 1" pos="0.005 0 -0.007" class="graspnet"/> 
+                    <site name="graspnet_middle_4" rgba="0 1 1 1" pos="0.005 0 -0.002" class="graspnet" /> 
+                    <site name="graspnet_middle_5" rgba="0 1 1 1" pos="0.005 0 0.003" class="graspnet"/> 
                     </body>
                     <body name="middle_distal" pos="0.00362954 5.15731e-05 0.0316123">
                         <site name="R_middle_tactile_sit" pos="-0.006 0 0.015" quat="0 -0.3826834 0 0.9238795"
@@ -317,13 +343,17 @@
                         <geom type="mesh" mesh="middle_distal" class="plastic_collision"/>
                         <!-- <geom pos="-0.0154288 3.90612e-05 0.0239429" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="middle_Virtual_Point" />
                         <geom pos="-0.0154288 3.90612e-05 0.0239429" type="mesh" rgba="1 1 1 1" mesh="middle_Virtual_Point" /> -->
+                        <body name="middle_distal_child">
+                          <site name="graspnet_distal_pen_0" pos="-0.003 0 -0.01" class="graspnet_pen"/>
+                          <site name="graspnet_distal_pen_1" pos="-0.01 0 0.016" class="graspnet_pen"/>
+                        </body>
                         <body name="site_middle" pos="-0.014 0.0 0.021">
                           <site name="site_middle" rgba="1 0 0 1"/> 
                           <!-- <geom class="robot0:D_Vizual" name="site_thumb_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
                         </body>
                         <body name="site_R_middle_distal" pos="-0.008 0 0.016">
                           <site name="site_R_middle_distal" rgba="1 0 0 1"/> 
-                          <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
+                          <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->                       
                         <site name="graspnet_middle_6" rgba="0 1 1 1" pos="0.009 0 -0.006" class="graspnet" /> 
                         <site name="graspnet_middle_7" rgba="0 1 1 1" pos="0.008 0 -0.003" class="graspnet"/> 
                         <site name="graspnet_middle_8" rgba="0 1 1 1" pos="0.006 0 0.000" class="graspnet"/> 
@@ -338,28 +368,34 @@
             <joint name="ring_mcp_pitch" pos="0 0 0" axis="0 1 0" range="0 1.5583" class="hand_joint"/>
             <geom size="0.009 0.012" pos="-0.002 0 0.014" type="capsule" class="plastic_collision" />
             <geom type="mesh" mesh="ring_proximal" class="plastic_visual"/>
+            <body name="ring_proximal_child">
+              <site name="graspnet_ring_proximal_pen_0" pos="0 0 0.015" class="graspnet_pen"/>
+            </body>
             <body name="site_R_ring_proximal_side" pos="0.0045 0 0.023">
               <site name="site_R_ring_proximal_side" rgba="1 0 0 1"/> 
               <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
-            <site name="graspnet_ring_proximal_1" rgba="0 1 1 1" pos="0.005 0.0 -0.004" class="graspnet" /> 
-            <site name="graspnet_ring_proximal_2" rgba="0 1 1 1" pos="0.005 0.0 -0.002" class="graspnet"/> 
-            <site name="graspnet_ring_proximal_3" rgba="0 1 1 1" pos="0.005 0.0 0.00" class="graspnet"/> 
-            <site name="graspnet_ring_proximal_4" rgba="0 1 1 1" pos="0.005 0.0 0.002" class="graspnet"/> 
-            <site name="graspnet_ring_proximal_5" rgba="0 1 1 1" pos="0.005 0.0 0.004" class="graspnet"/>
+            <site name="graspnet_ring_proximal_1" rgba="0 1 1 1" pos="0.002 0.0 -0.022" class="graspnet" /> 
+            <site name="graspnet_ring_proximal_2" rgba="0 1 1 1" pos="0.002 0.0 -0.016" class="graspnet"/> 
+            <site name="graspnet_ring_proximal_3" rgba="0 1 1 1" pos="0.002 0.0 -0.010" class="graspnet"/> 
+            <site name="graspnet_ring_proximal_4" rgba="0 1 1 1" pos="0.002 0.0 -0.004" class="graspnet"/> 
+            <site name="graspnet_ring_proximal_5" rgba="0 1 1 1" pos="0.002 0.0 0.002" class="graspnet"/>
             </body>
             <body name="ring_middle" pos="-0.0039295 0 0.03983">
                 <inertial pos="0.000940341 -1.66668e-05 0.0134216" quat="0.999942 -0.000103876 -0.0107411 3.34326e-05" mass="0.00270775" diaginertia="2.25818e-07 1.61876e-07 1.1765e-07" />
                 <joint name="ring_pip" pos="0 0 0" axis="0 1 0" range="0 1.37758" class="hand_joint"/>
                 <geom size="0.009 0.010" pos="0.0015 0 0.014" type="capsule" class="plastic_collision" />
                 <geom type="mesh" mesh="ring_middle" class="plastic_visual"/>
+                <body name="ring_middle_child">
+                  <site name="graspnet_ring_middle_pen_0" pos="0.003 0 0" class="graspnet_pen"/>
+                </body>
                 <body name="site_R_ring_middle_side" pos="0.0065 0 0.018">
                   <site name="site_R_ring_middle_side" rgba="1 0 0 1"/> 
                   <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
-                <site name="graspnet_ring_1" rgba="0 1 1 1" pos="0.005 0 -0.004" class="graspnet" /> 
-                <site name="graspnet_ring_2" rgba="0 1 1 1" pos="0.005 0 -0.002" class="graspnet"/> 
-                <site name="graspnet_ring_3" rgba="0 1 1 1" pos="0.005 0 0.000" class="graspnet"/> 
-                <site name="graspnet_ring_4" rgba="0 1 1 1" pos="0.005 0 0.002" class="graspnet" /> 
-                <site name="graspnet_ring_5" rgba="0 1 1 1" pos="0.004 0 0.004" class="graspnet"/>
+                <site name="graspnet_ring_1" rgba="0 1 1 1" pos="0.004 0 -0.012" class="graspnet" /> 
+                <site name="graspnet_ring_2" rgba="0 1 1 1" pos="0.004 0 -0.007" class="graspnet"/> 
+                <site name="graspnet_ring_3" rgba="0 1 1 1" pos="0.004 0 -0.002" class="graspnet"/> 
+                <site name="graspnet_ring_4" rgba="0 1 1 1" pos="0.004 0 0.003" class="graspnet" /> 
+                <site name="graspnet_ring_5" rgba="0 1 1 1" pos="0.004 0 0.008" class="graspnet"/>
                 </body>
                 <body name="ring_distal" pos="0.00601276 0 0.0264415">
                     <site name="R_ring_tactile_sit" pos="-0.006 0 0.017" quat="0 -0.3826834 0 0.9238795"
@@ -371,6 +407,10 @@
                     <geom type="mesh" mesh="ring_distal" class="plastic_visual"/>
                     <!-- <geom pos="-0.01334 0 0.025167" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="ring_Virtual_Point" />
                     <geom pos="-0.01334 0 0.025167" type="mesh" rgba="1 1 1 1" mesh="ring_Virtual_Point" /> -->
+                    <body name="ring_distal_child">
+                      <site name="graspnet_ring_pen_1" pos="-0.005 0 -0.003" class="graspnet_pen"/>
+                      <site name="graspnet_ring_pen_2" pos="-0.008 0 0.018" class="graspnet_pen"/>
+                    </body>
                     <body name="site_ring" pos="-0.012 0.0 0.021">
                       <site name="site_ring" rgba="1 0 0 1"/> 
                       <!-- <geom class="robot0:D_Vizual" name="site_thumb_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
@@ -391,28 +431,34 @@
             <joint name="pinky_mcp_pitch" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.5583" class="hand_joint"/>
             <geom size="0.009 0.012" pos="-0.002 0 0.014" type="capsule" class="plastic_collision" />
             <geom type="mesh" mesh="pinky_proximal" class="plastic_visual"/>
+            <body name="pinky_proximal_child">
+              <site name="graspnet_pinky_proximal_pen_0" pos="0 0 0.015" class="graspnet_pen"/>
+            </body>
             <body name="site_R_pinky_proximal_side" pos="0.0045 0 0.023">
               <site name="site_R_pinky_proximal_side" rgba="1 0 0 1"/> 
               <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
-            <site name="graspnet_pinky_proximal_1" rgba="0 1 1 1" pos="0.005 0.0 -0.004" class="graspnet" /> 
-            <site name="graspnet_pinky_proximal_2" rgba="0 1 1 1" pos="0.005 0.0 -0.002" class="graspnet"/> 
-            <site name="graspnet_pinky_proximal_3" rgba="0 1 1 1" pos="0.005 0.0 0.00" class="graspnet"/> 
-            <site name="graspnet_pinky_proximal_4" rgba="0 1 1 1" pos="0.005 0.0 0.002" class="graspnet"/> 
-            <site name="graspnet_pinky_proximal_5" rgba="0 1 1 1" pos="0.005 0.0 0.004" class="graspnet"/>
+            <site name="graspnet_pinky_proximal_1" rgba="0 1 1 1" pos="0.002 0.0 -0.022" class="graspnet" /> 
+            <site name="graspnet_pinky_proximal_2" rgba="0 1 1 1" pos="0.002 0.0 -0.017" class="graspnet"/> 
+            <site name="graspnet_pinky_proximal_3" rgba="0 1 1 1" pos="0.002 0.0 -0.012" class="graspnet"/> 
+            <site name="graspnet_pinky_proximal_4" rgba="0 1 1 1" pos="0.002 0.0 -0.007" class="graspnet"/> 
+            <site name="graspnet_pinky_proximal_5" rgba="0 1 1 1" pos="0.002 0.0 -0.002" class="graspnet"/>
             </body>
             <body name="pinky_middle" pos="-0.0039295 0 0.0398303">
                 <inertial pos="0.000940341 -1.66665e-05 0.0134216" quat="0.999942 -0.000103836 -0.0107411 3.34302e-05" mass="0.00270775" diaginertia="2.25818e-07 1.61876e-07 1.1765e-07" />
                 <joint name="pinky_pip" pos="0 0 0" axis="0 1 0" limited="true" range="0 1.37758" class="hand_joint"/>
                 <geom size="0.009 0.010" pos="0.0015 0 0.014" type="capsule" class="plastic_collision" />
                 <geom type="mesh" mesh="pinky_middle" class="plastic_visual"/>
+                <body name="pinky_middle_child">
+                  <site name="graspnet_pinky_middle_pen_0" pos="0.003 0 0" class="graspnet_pen"/>
+                </body>
                 <body name="site_R_pinky_middle_side" pos="0.0065 0 0.018">
                   <site name="site_R_pinky_middle_side" rgba="1 0 0 1"/> 
                   <!-- <geom name="site_R_thumb_proximal_side_visual" type="sphere" size="0.01" rgba="1 0 0 1"/> -->
-                <site name="graspnet_pinky_1" rgba="0 1 1 1" pos="0.005 0 -0.004" class="graspnet" /> 
-                <site name="graspnet_pinky_2" rgba="0 1 1 1" pos="0.005 0 -0.002" class="graspnet"/> 
-                <site name="graspnet_pinky_3" rgba="0 1 1 1" pos="0.005 0 0.000" class="graspnet"/> 
-                <site name="graspnet_pinky_4" rgba="0 1 1 1" pos="0.005 0 0.002" class="graspnet" /> 
-                <site name="graspnet_pinky_5" rgba="0 1 1 1" pos="0.004 0 0.004" class="graspnet"/>
+                <site name="graspnet_pinky_1" rgba="0 1 1 1" pos="0.004 0 -0.012" class="graspnet" /> 
+                <site name="graspnet_pinky_2" rgba="0 1 1 1" pos="0.004 0 -0.007" class="graspnet"/> 
+                <site name="graspnet_pinky_3" rgba="0 1 1 1" pos="0.004 0 -0.002" class="graspnet"/> 
+                <site name="graspnet_pinky_4" rgba="0 1 1 1" pos="0.004 0 0.003" class="graspnet" /> 
+                <site name="graspnet_pinky_5" rgba="0 1 1 1" pos="0.004 0 0.008" class="graspnet"/>
                 </body>
                 <body name="pinky_distal" pos="0.0060127 0 0.0264416">
                     <site name="R_pinky_tactile_sit" pos="-0.006 0 0.017" quat="0 -0.3826834 0 0.9238795"
@@ -424,6 +470,10 @@
                     <geom type="mesh" mesh="pinky_distal" class="plastic_visual" />
                     <!-- <geom pos="-0.0133405 0 0.0251664" type="mesh" contype="0" conaffinity="0" group="1" rgba="1 1 1 1" mesh="pinky_Virtual_Point" />
                     <geom pos="-0.0133405 0 0.0251664" type="mesh" rgba="1 1 1 1" mesh="pinky_Virtual_Point" /> -->
+                    <body name="pinky_distal_child">
+                      <site name="graspnet_pinky_pen_1" pos="-0.005 0 -0.003" class="graspnet_pen"/>
+                      <site name="graspnet_pinky_pen_2" pos="-0.008 0 0.018" class="graspnet_pen"/>
+                    </body>
                     <body name="site_pinky" pos="-0.012 0.0 0.021">
                       <site name="site_pinky" rgba="1 0 0 1"/> 
                       <!-- <geom class="robot0:D_Vizual" name="site_thumb_visual" type="sphere" size="0.007" rgba="1 0 0 1"/> -->
@@ -521,7 +571,7 @@
   </actuator>
 
   <!-- Joint2 is actuated, Joint1 is passive -->
-  <equality>
+  <!-- <equality>
     <joint name="thumb_tendon" joint1="thumb_ip" joint2="thumb_mcp"
       polycoef="0 0.6359 -0.3539 -0.3066 -0.124" />
     <joint name="index_tendon" joint1="index_dip" joint2="index_pip"
@@ -536,8 +586,31 @@
       polycoef="0.0  0.7869 0.3884 -0.4545 0.1578" />
     <joint name="pinky_tendon_dip" joint1="pinky_dip" joint2="pinky_mcp_pitch"
       polycoef="0.0  0.899 0.3138 -0.1728 -0.03666" />
-  </equality>
-
+  </equality> -->
+  <tendon>
+    <fixed name="thumb_tendon" limited="true" range="-0.001 0.001">
+        <joint joint="thumb_mcp" coef="0.00705"/>
+        <joint joint="thumb_ip" coef="-0.0085" />
+    </fixed>
+    <fixed name="index_tendon" limited="true" range="-0.001 0.001">
+        <joint joint="index_pip" coef="0.00705"/>
+        <joint joint="index_dip" coef="-0.0085" />
+    </fixed>
+    <fixed name="middle_tendon" limited="true" range="-0.001 0.001">
+        <joint joint="middle_pip" coef="0.00705"/>
+        <joint joint="middle_dip" coef="-0.0085" />
+    </fixed>
+    <fixed name="ring_tendon" limited="true" range="-0.001 0.001">
+        <joint joint="ring_mcp_pitch" coef="-0.00705"/>
+        <joint joint="ring_pip" coef="0.0025"/>
+        <joint joint="ring_dip" coef="0.0015" />
+    </fixed>
+    <fixed name="pinky_tendon" limited="true" range="-0.001 0.001">
+        <joint joint="pinky_mcp_pitch" coef="-0.00705"/>
+        <joint joint="pinky_pip" coef="0.0025"/>
+        <joint joint="pinky_dip" coef="0.0015" />
+    </fixed>
+  </tendon>
 
 
   <sensor>

@@ -28,7 +28,7 @@ class Logger:
         self.thres_dis = thres_dis
         self.thres_pen = thres_pen
 
-    def log(self, energy, E_fc, E_dis, E_pen, E_spen, E_joints, step, show=False):
+    def log(self, energy, E_fc, E_dis, E_pen, E_spen, E_joints, step, E_cmap=None, show=False):
         """
         Log energy terms and estimate success rate using energy thresholds
         
@@ -43,6 +43,8 @@ class Logger:
         E_joints: torch.Tensor
         step: int
             current iteration of optimization
+        E_cmap: torch.Tensor [Optional]
+            contact map energy
         show: bool
             whether to print current energy terms to console
         """
@@ -54,6 +56,12 @@ class Logger:
         self.writer.add_scalar('Energy/fc', E_fc.mean(), step)
         self.writer.add_scalar('Energy/dis', E_dis.mean(), step)
         self.writer.add_scalar('Energy/pen', E_pen.mean(), step)
+        self.writer.add_scalar('Energy/spen', E_spen.mean(), step)
+        self.writer.add_scalar('Energy/joints', E_joints.mean(), step)
+        
+        # Add contact map energy if provided
+        if E_cmap is not None:
+            self.writer.add_scalar('Energy/cmap', E_cmap.mean(), step)
 
         self.writer.add_scalar('Success/success', success.float().mean(), step)
         self.writer.add_scalar('Success/fc', success_fc.float().mean(), step)
@@ -61,5 +69,8 @@ class Logger:
         self.writer.add_scalar('Success/pen', success_pen.float().mean(), step)
 
         if show:
-            print(f'Step %d energy: %f  fc: %f  dis: %f  pen: %f  spen: %f  joints: %f' % (step, energy.mean(), E_fc.mean(), E_dis.mean(), E_pen.mean(), E_spen.mean(), E_joints.mean()))
-            print(f'success: %f  fc: %f  dis: %f  pen: %f' % (success.float().mean(), success_fc.float().mean(), success_dis.float().mean(), success_pen.float().mean()))
+            if E_cmap is not None:
+                print(f'Step {step} energy: {energy.mean():.6f}  fc: {E_fc.mean():.6f}  dis: {E_dis.mean():.6f}  pen: {E_pen.mean():.6f}  spen: {E_spen.mean():.6f}  joints: {E_joints.mean():.6f}  cmap: {E_cmap.mean():.6f}')
+            else:
+                print(f'Step {step} energy: {energy.mean():.6f}  fc: {E_fc.mean():.6f}  dis: {E_dis.mean():.6f}  pen: {E_pen.mean():.6f}  spen: {E_spen.mean():.6f}  joints: {E_joints.mean():.6f}')
+            print(f'success: {success.float().mean():.6f}  fc: {success_fc.float().mean():.6f}  dis: {success_dis.float().mean():.6f}  pen: {success_pen.float().mean():.6f}')

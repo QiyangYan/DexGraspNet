@@ -54,15 +54,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--seed', default=1, type=int)
 parser.add_argument('--gpu', default="0", type=str)
 parser.add_argument('--num', default=0, type=int)
-parser.add_argument('--object_code_list', default=
-    [
-        'sem-Camera-7bff4fd4dc53de7496dece3f86cb5dd5',
-        # 'sem-Car-2f28e2bd754977da8cfac9da0ff28f62',
-        # 'sem-Car-27e267f0570f121869a949ac99a843c4',
-        # 'sem-Car-669043a8ce40d9d78781f76a6db4ab62',
-        # 'sem-Car-58379002fbdaf20e61a47cff24512a0',
-        # 'sem-Car-aeeb2fb31215f3249acee38782dd9680',
-    ], type=list)
+parser.add_argument('--object_code_list', default=['47_008_pudding_box'], type=list)
 parser.add_argument('--name', default='exp_2', type=str)
 parser.add_argument('--n_contact', default=96, type=int)
 parser.add_argument('--batch_size', default=128, type=int)
@@ -106,7 +98,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('running on', device)
 
-grasp_file = "dexycb_robot_joint_dict_1021_0045_omnihand"
+grasp_file = "dexycb_robot_joint_dict_1030_1525_omnihand"
 result_path = "/home/guizhewei/guizhewei/grasp_pose_dataset/unoptimized"
 data_dict = np.load(os.path.join(result_path, grasp_file + '.npy'), allow_pickle=True)[args.num]
 qpos = data_dict['qpos']

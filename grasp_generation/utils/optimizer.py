@@ -178,3 +178,102 @@ class Annealing:
         """
         if self.hand_model.hand_pose.grad is not None:
             self.hand_model.hand_pose.grad.data.zero_()
+
+
+class Adam:
+    def __init__(self, hand_model, switch_possibility=0.5, starting_temperature=18, temperature_decay=0.95,
+                 annealing_period=30, step_size=0.005, stepsize_period=50, mu=0.98, device='cpu', init_hand_pose=None):
+        """
+        使用带有随机接触点重采样的 Adam 优化器
+
+        参数与 Annealing 保持一致，便于在主程序中互换
+        """
+        self.hand_model = hand_model
+        self.device = device
+        self.switch_possibility = switch_possibility
+        self.step_size = torch.tensor(step_size, dtype=torch.float, device=device)
+        self.temperature_decay = torch.tensor(temperature_decay, dtype=torch.float, device=device)
+        self.step_size_period = torch.tensor(stepsize_period, dtype=torch.long, device=device)
+        # 兼容接口所需参数（在 Adam 中不直接使用，但保留用于统一配置）
+        self.starting_temperature = torch.tensor(starting_temperature, dtype=torch.float, device=device)
+        self.annealing_period = torch.tensor(annealing_period, dtype=torch.long, device=device)
+        self.mu = torch.tensor(mu, dtype=torch.float, device=device)
+
+        self.beta1 = torch.tensor(0.9, dtype=torch.float, device=device)
+        self.beta2 = torch.tensor(0.999, dtype=torch.float, device=device)
+        self.eps = torch.tensor(1e-8, dtype=torch.float, device=device)
+
+        self.m = torch.zeros_like(self.hand_model.hand_pose, dtype=torch.float, device=device)
+        self.v = torch.zeros_like(self.hand_model.hand_pose, dtype=torch.float, device=device)
+        self.beta1_pow = torch.tensor(1.0, dtype=torch.float, device=device)
+        self.beta2_pow = torch.tensor(1.0, dtype=torch.float, device=device)
+
+        self.init_hand_pose = init_hand_pose
+        self.step = 0
+        self.current_step_size = self.step_size.clone()
+
+    def _compute_step_size(self):
+        decay_step = torch.div(self.step, self.step_size_period, rounding_mode='floor')
+        lr = self.step_size * (self.temperature_decay ** decay_step)
+        return lr
+
+    def try_step(self, fix_wrist=False):
+        """
+        使用 Adam 更新手部姿态，并随机重采样接触点
+        """
+        lr = self._compute_step_size()
+        grad = self.hand_model.hand_pose.grad
+
+        self.m = self.beta1 * self.m + (1 - self.beta1) * grad
+        self.v = self.beta2 * self.v + (1 - self.beta2) * (grad ** 2)
+
+        self.beta1_pow = self.beta1_pow * self.beta1
+        self.beta2_pow = self.beta2_pow * self.beta2
+
+        m_hat = self.m / (1 - self.beta1_pow)
+        v_hat = self.v / (1 - self.beta2_pow)
+
+        update = lr * m_hat / (torch.sqrt(v_hat) + self.eps)
+        hand_pose = self.hand_model.hand_pose - update
+
+        if fix_wrist:
+            rng_list = [0.01, 0.01, 0.01]
+            rng_head = torch.as_tensor(rng_list, device=hand_pose.device, dtype=hand_pose.dtype).view(1, -1)
+            K = rng_head.shape[-1]
+
+            rng_full = torch.zeros_like(hand_pose)
+            rng_full[:, :K] = rng_head
+
+            x0 = self.init_hand_pose
+            lo = x0[:, :K] - rng_head
+            hi = x0[:, :K] + rng_head
+            firstK = torch.max(lo, torch.min(hand_pose[:, :K], hi))
+            hand_pose = torch.cat([firstK, hand_pose[:, K:]], dim=1)
+
+        batch_size, n_contact = self.hand_model.contact_point_indices.shape
+        switch_mask = torch.rand(batch_size, n_contact, dtype=torch.float, device=self.device) < self.switch_possibility
+        contact_point_indices = self.hand_model.contact_point_indices.clone()
+        if switch_mask.any():
+            contact_point_indices[switch_mask] = torch.randint(
+                self.hand_model.n_contact_candidates,
+                size=[switch_mask.sum()],
+                device=self.device
+            )
+
+        self.hand_model.set_parameters(hand_pose, contact_point_indices)
+
+        self.step += 1
+        self.current_step_size = lr
+
+        return lr
+
+    def accept_step(self, energy, new_energy):
+        """
+        Adam 始终接受更新，保持与 Annealing 相同的接口
+        """
+        accept = torch.ones_like(energy, dtype=torch.bool, device=energy.device)
+        return accept, self.current_step_size
+
+    def zero_grad(self):
+        if self.hand_model.hand_pose.grad is not None:
+            self.hand_model.hand_pose.grad.data.zero_()

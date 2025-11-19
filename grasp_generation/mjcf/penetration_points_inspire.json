@@ -1,0 +1,17 @@
+{
+    "right_hand_base_child": [],
+    "right_hand_child": [],
+    "R_thumb_proximal_base_child": [],
+    "R_hand_base": [],
+    "R_thumb_proximal_child": [],
+    "R_thumb_intermediate_child": [[0, 0, 0]],
+    "R_thumb_distal_child": [[0.0, 0.02009, 0.00059], [0.0, 0.02009, 0.00059]],
+    "R_index_proximal_child": [[0.01, 0.013, 0.0074]],
+    "R_index_distal_child": [[0.00832, 0.02, 0.0012], [0.00832, 0.03917, 0.00924]],
+    "R_middle_proximal_child": [],
+    "R_middle_distal_child": [],
+    "R_ring_proximal_child": [],
+    "R_ring_distal_child": [],
+    "R_pinky_proximal_child": [],
+    "R_pinky_distal_child": []
+}
