@@ -125,7 +125,7 @@ class ObjectModel:
             self.object_scale_tensor.append(object_scale_batch)
             self.scene_scale_tensor.append(scene_scale_batch)
             self.obj_scale_tensor.append(obj_scale_batch)
-            self.object_mesh_list.append(tm.load(os.path.join(self.data_root_path, object_code, "mesh/simplified.obj"), force="mesh", process=False)) # textured_simple.obj
+            self.object_mesh_list.append(tm.load(os.path.join(self.data_root_path, object_code, "textured_simple.obj"), force="mesh", process=False)) # textured_simple.obj, mesh/simplified.obj
             object_verts = torch.Tensor(self.object_mesh_list[-1].vertices).to(self.device)
             object_faces = torch.Tensor(self.object_mesh_list[-1].faces).long().to(self.device)
             self.object_face_verts_list.append(index_vertices_by_faces(object_verts, object_faces))

@@ -714,7 +714,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('running on', device)
 
 # TODO： modify the grasp file name
-grasp_file = "bodex_1obj_bottle" # bodex_1obj_bottle, dexonomy_1obj_fin_cmap
+grasp_file = "bodex_1obj_bottle_good" # bodex_1obj_bottle, dexonomy_1obj_fin_cmap
 result_path = "/home/guizhewei/guizhewei/grasp_pose_dataset/unoptimized/bodex" # /home/guizhewei/guizhewei/grasp_pose_dataset/unoptimized/bodex ,/home/guizhewei/guizhewei/grasp_pose_dataset/unoptimized
 # 加载所有数据（去掉 [:10] 限制）
 data_dict = np.load(os.path.join(result_path, grasp_file + '.npy'), allow_pickle=True)
@@ -731,7 +731,7 @@ contact_map_list = []  # 存储 contact map 数据
 skipped_count = 0
 
 # TODO: debug first 10
-data_dict = data_dict[100:150]
+data_dict = data_dict[50:100]
 
 for i, data in enumerate(data_dict):
     if args.object_code is not None and data['object_code'] != args.object_code:
