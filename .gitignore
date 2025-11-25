@@ -12,5 +12,5 @@ TorchSDF
 thirdparty
 grasp_generation/mjcf/meshes_shadow
 grasp_generation/mjcf/meshes_inspire
-
+data/1obj
 
